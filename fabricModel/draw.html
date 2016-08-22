@@ -1,17 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html style="display:block;">
     <head>
+        <meta charset="utf-8">
+        <title>Draw ML</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="fabric.js"></script>
-        <script type="text/javascript" src="mlModel.js"></script>
         <script type="text/javascript" src="XMLWriter.js"></script>
+        <link rel="stylesheet" type="text/css" href="mycss.css">
+
     </head>
     
     <body>
-    <canvas id="canvas"
-            width="800" 
-            height="450" 
-            ></canvas>
-        <script type="text/javascript" src="mfab.js"></script>
-        <script type="text/javascript" src="xmlSample.js"></script>
+
+    <header>
+        <nav id="nav_head" class="navbar navbar-default navbar-fixed-top navbar-inverse"
+             role="navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand">Top</a>
+                <button type="button" class="btn btn-default navbar-btn">Sign in</button>
+                <p class="navbar-text">Signed in as Mark Otto</p>
+                <p class="navbar-text">Signed in as Mark Otto</p>
+                <p class="navbar-text">Signed in as Mark Otto</p>
+                <p class="navbar-text">Signed in as Mark Otto</p>
+                <p class="navbar-text pull-right">Signed in as Mark Otto</p>
+
+            </div>
+        </nav>
+    </header>
+
+    <div id="mid" class="container-fluid" style="padding-top: 70px; padding-bottom: 70px;">
+        <div id="map" class="row">
+            <div id="paintContainer" class="col-sm-12  col-md-12">
+                <div id="leftSideBar" class="col-sm-2 col-md-2 sidebar">
+                    <div class="list-group">
+                        <div id="model_LinearRegression" class="list-group-item">LinearRegression</div>
+                        <div id="model_PolynomialRegression" class="list-group-item">PolynomialRegression</div>
+                        <div id="model_SoftMaxRegression" class="list-group-item">SoftMaxRegression</div>
+                        <div id="model_NeuralNetworks" class="list-group-item">NeuralNetworks</div>
+                        <div id="model_ConvolutionNeuralNet" class="list-group-item">ConvolutionNeuralNet</div>
+                        <div id="model_RecurrentNeuralNet" class="list-group-item">RecurrentNeuralNet</div>
+                     </div>
+                </div>
+                <div id="canvasContaianer" class ="col-sm-8 col-md-8">
+                    <canvas id="canvas" width="100" height="100"></canvas>
+                </div>
+                <div id="rightSiedBar" class="col-sm-2 col-md-2 sidebar">
+                    <ul class="nav nav-sidebar">
+                        <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">Reports</a></li>
+                        <li><a href="#">Analytics</a></li>
+                        <li><a href="#">Export</a></li>
+                    </ul>
+                    <ul class="nav nav-sidebar">
+                        <li><a href="">Nav item</a></li>
+                        <li><a href="">Nav item again</a></li>
+                        <li><a href="">One more nav</a></li>
+                        <li><a href="">Another nav item</a></li>
+                        <li><a href="">More navigation</a></li>
+                    </ul>
+                    <ul class="nav nav-sidebar">
+                        <li><a href="">Nav item again</a></li>
+                        <li><a href="">One more nav</a></li>
+                        <li><a href="">Another nav item</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div id="nav_footer" class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <a class="navbar-brand">Top</a>
+                <button type="button" class="btn btn-default navbar-btn">Sign in</button>
+                <p class="navbar-text">Signed in as Mark Otto</p>
+                <span class="label label-danger">Danger</span>
+                <p class="navbar-text pull-right">Signed in as Mark Otto</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="drawModel.js"></script>
+    <script type="text/javascript" src="mfab.js"></script>
     </body>
 </html>
+
