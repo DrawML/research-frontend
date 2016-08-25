@@ -10,6 +10,25 @@ canvas.on('mouse:move', function(options) {
     //console.log(canvasX,canvasY);
 });
 
+/////////////////////////////////////////////
+////////////manage ML models/////////////////
+/////////////////////////////////////////////
+var modelCnt=0;
+var models=[];
+var currentSelectedModel; // Use when I change options
+
+function getModelById(id){
+    for(model in models){
+        console.log(models[model]);
+        if(models[model].ID ===id) return models[model];
+    }
+    return null;
+}
+
+/*
+ Fabric Container Models
+ * */
+
 function getContainer(algorithmName) {
     this.AlgoritmContainer = new fabric.Rect({
         fill:'#ffffff',
@@ -75,32 +94,51 @@ function getOptionContainer(opName,type){
     return this.group;
 }
 
-function random_uniform(){
+/*
+    Initializer Objects
+* */
 
-    this.type = 'random_uniform';
-    this.model = new getOptionContainer('random_uniform','init');
+function Initializer(type){
+
+    this.type = type;
+    this.model = new getOptionContainer(type,'init');
     this.min=-1.0;
     this.max=1.0;
+    this.val=1.0;
 
-    this.changeMinMax = function (min,max) {
-        this.min=min;
-        this.max=max;
-        this.model.item(1).setText(this.type+" "+min+"~"+max);
+    this.changeType =function(type){
+        this.type=type;
+        this.model.item(1).setText(this.type);
         this.model.item(1).set({
             left : -this.model.item(1).getWidth()/2,
             top : -this.model.item(1).getHeight()/2
         });
+        canvas.renderAll();
+
+    }
+    this.changeVal =function(val){
+        this.val=val;
+    }
+
+    this.changeMinMax = function (min,max) {
+        this.min=min;
+        this.max=max;
+        // this.model.item(1).setText(this.type+" "+min+"~"+max);
+        // this.model.item(1).set({
+        //     left : -this.model.item(1).getWidth()/2,
+        //     top : -this.model.item(1).getHeight()/2
+        // });
     }
 
     //ToXml
 
 }
 
-function Optimizer(){
-
-    this.list = ['gradient_descent','adam_optimizer'];
-
-    this.type = 'gradient_descent';
+/*
+ Optimizer Model
+ * */
+function Optimizer(type){
+    this.type = type;
     this.model = new getOptionContainer(this.type,'optimizer');
     this.learningRate =0.01;
 
@@ -111,15 +149,25 @@ function Optimizer(){
             left : -this.model.item(1).getWidth()/2,
             top : -this.model.item(1).getHeight()/2
         });
+        canvas.renderAll();
     }
+
+    this.changeLearningRate = function(rate){
+        this.learningRate=rate;
+    }
+
 }
 
-function Linear(pointLeft, pointTop){
+function LinearRegression(id,pointLeft, pointTop){
 
+    this.ID=id;
     this.type =  "Linear Regression";
-    this.initializer = new random_uniform();
-    this.optimizer = new Optimizer();
+    this.initializer = new Initializer('random_uniform');
+    this.optimizer = new Optimizer('gradient descent');
+    this.regularization = 'False';
+    this.lambda =0;
     this.training_epoch = 1024;
+
 
 
     //fabric model
@@ -129,26 +177,79 @@ function Linear(pointLeft, pointTop){
             left:pointLeft,
             top : pointTop
         });
+    this.fabricModel.id=this.ID;
 
     this.fabricModel.on('selected',function(options){
-        // if(!this.copy) {
-        //     models.push(currentModel[0]);
-        //     currentModel[0] = new Linear();
-        //     canvas.add(currentModel[0].fabricModel);
-        //     this.copy=true;
-        // }
+        currentSelectedModel=getModelById(this.id);
+        currentSelectedModel.changeOptionMenu();
     });
+    this.fabricModel.onclick
+
+    this.changeOptionMenu =function () {
+
+        //Set Initializer
+        $('#initializer-btn').show();
+        var iniType = this.initializer.type;
+        $('#change-Initializer-current').text(iniType);
+        if(iniType=='random_uniform'){
+            $('#change-Initializer-value').hide();
+            $('#change-Initializer-value-max').show();
+            $('#change-Initializer-value-min').show();
+        }else if(iniType=='random_normal'){
+            $('#change-Initializer-value').show();
+            $('#change-Initializer-value-max').hide();
+            $('#change-Initializer-value-min').hide();
+        }
+        $('#change-Initializer-value-max-input').val(this.initializer.max);
+        $('#change-Initializer-value-min-input').val(this.initializer.min);
+        $('#change-Initializer-value-input').val(this.initializer.val);
+
+        //Set Optimizer
+        $('#optimizer-btn').show();
+        $('#change-Optimizer-current').text(this.optimizer.type);
+        $('#change-Optimizer-learningRate-input').val(this.optimizer.learningRate);
+
+        //Set Regularization
+        $('#regularization-btn').show();
+        $('#change-regularization-current').text(this.regularization);
+        if(this.regularization=="False"){
+            $('#change-regularization-lambda').hide();
+        }else{
+            $('#change-regularization-lambda').show();
+        }
+        $('#change-regularization-lambda-input').val(this.lambda);
+        //Set trainingEpoch
+        $('#trainingEpoch-btn').show();
+        $('#change-trainingEpoch-input').val(this.training_epoch);
+
+        //TODO : 다른 CNN,RNN등 모델들이 추가가 되었을 때. 나머지 옵션이 안보이게 처리해야됨.
+    }
+
+    //change Initializer
+    this.changeInitializer =function (type) {
+        this.initializer.changeType(type);
+    }
+
+    //change Optimizer
+    this.changeOptimizer =function(type){
+        this.optimizer.changeOptimizer(type);
+    }
+
+    //change Regularization
+    this.setRegularizationEnable =function (can) {
+        this.regularization=can
+    }
+
+    this.setLambda = function(val){
+        this.lambda=val;
+    }
 
     //change training epoch
     this.changeTrainingEpoch =function (val) {
         this.training_epoch=val;
     }
 
-    //changeInitializer
-    this.changeInitializer =function () {
-        
-    }
-    
+
     this.writeToObject =function () {
         
     }
@@ -157,4 +258,11 @@ function Linear(pointLeft, pointTop){
     this.writeXML = function () {
         
     }
+
+    this.getOptionHTML=function(){
+
+
+    }
+
+    this.changeOptionMenu();
 }

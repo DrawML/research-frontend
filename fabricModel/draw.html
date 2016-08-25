@@ -11,11 +11,9 @@
         <script type="text/javascript" src="fabric.js"></script>
         <script type="text/javascript" src="XMLWriter.js"></script>
         <link rel="stylesheet" type="text/css" href="mycss.css">
-
     </head>
     
     <body>
-
     <header>
         <nav id="nav_head" class="navbar navbar-default navbar-fixed-top navbar-inverse"
              role="navigation">
@@ -37,37 +35,101 @@
             <div id="paintContainer" class="col-sm-12  col-md-12">
                 <div id="leftSideBar" class="col-sm-2 col-md-2 sidebar">
                     <div class="list-group">
-                        <div id="model_LinearRegression" class="list-group-item">LinearRegression</div>
-                        <div id="model_PolynomialRegression" class="list-group-item">PolynomialRegression</div>
-                        <div id="model_SoftMaxRegression" class="list-group-item">SoftMaxRegression</div>
-                        <div id="model_NeuralNetworks" class="list-group-item">NeuralNetworks</div>
-                        <div id="model_ConvolutionNeuralNet" class="list-group-item">ConvolutionNeuralNet</div>
-                        <div id="model_RecurrentNeuralNet" class="list-group-item">RecurrentNeuralNet</div>
+                        <div id="LinearRegression" class="list-group-item">LinearRegression</div>
+                        <div id="PolynomialRegression" class="list-group-item">PolynomialRegression</div>
+                        <div id="SoftMaxRegression" class="list-group-item">SoftMaxRegression</div>
+                        <div id="NeuralNetworks" class="list-group-item">NeuralNetworks</div>
+                        <div id="ConvolutionNeuralNet" class="list-group-item">ConvolutionNeuralNet</div>
+                        <div id="RecurrentNeuralNet" class="list-group-item">RecurrentNeuralNet</div>
                      </div>
                 </div>
                 <div id="canvasContaianer" class ="col-sm-8 col-md-8">
                     <canvas id="canvas" width="100" height="100"></canvas>
                 </div>
                 <div id="rightSiedBar" class="col-sm-2 col-md-2 sidebar">
-                    <ul class="nav nav-sidebar">
-                        <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">Reports</a></li>
-                        <li><a href="#">Analytics</a></li>
-                        <li><a href="#">Export</a></li>
-                    </ul>
-                    <ul class="nav nav-sidebar">
-                        <li><a href="">Nav item</a></li>
-                        <li><a href="">Nav item again</a></li>
-                        <li><a href="">One more nav</a></li>
-                        <li><a href="">Another nav item</a></li>
-                        <li><a href="">More navigation</a></li>
-                    </ul>
-                    <ul class="nav nav-sidebar">
-                        <li><a href="">Nav item again</a></li>
-                        <li><a href="">One more nav</a></li>
-                        <li><a href="">Another nav item</a></li>
-                    </ul>
+                    <h2>Options</h2>
+                    <button id="initializer-btn" type="button" class="btn btn-info" data-toggle="collapse" data-target="#div-initializer">Initializer</button>
+                    <div id="div-initializer" class="collapse">
+                        <div class="oprion-items">
+                            <div class="option-type"><h4>Type</h4></div>
+                            <div class="btn-group">
+                                <button id="change-Initializer-current" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                    random_uniform <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a id="change-Initializer-random_uniform" href="#">random_uniform</a></li>
+                                    <li><a id="change-Initializer-random_normal" href="#">random_normal</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="change-Initializer-value" class="input-group oprion-items">
+                            <span class="input-group-addon" id="value">value</span>
+                            <input id="change-Initializer-value-input" type="text" class="form-control" placeholder="0.0~1.0" aria-describedby="value">
+                        </div>
+                        <div id="change-Initializer-value-min" class="input-group oprion-items">
+                            <span class="input-group-addon" id="value_min">value_min</span>
+                            <input id="change-Initializer-value-min-input" type="text" class="form-control" placeholder="무한~무한" aria-describedby="value_min">
+                        </div>
+                        <div id="change-Initializer-value-max" class="input-group oprion-items">
+                            <span class="input-group-addon" id="value_max">value_max</span>
+                            <input id="change-Initializer-value-max-input" type="text" class="form-control" placeholder="무한~무한" aria-describedby="value_max">
+                        </div>
+                    </div>
+
+                    <button id="optimizer-btn" type="button" class="btn btn-info" data-toggle="collapse" data-target="#div-optimizer">Optimizer</button>
+                    <div id="div-optimizer" class="collapse">
+                        <div  class="oprion-items">
+                            <div class="option-type"><h4>Type</h4></div>
+                            <div class="btn-group">
+                                <button id="change-Optimizer-current" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                    gradient descent <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a id="change-Optimizer-gradientDescent" href="#">gradient descent</a></li>
+                                    <li><a id="change-Optimizer-adadelta"href="#">adadelta</a></li>
+                                    <li><a id="change-Optimizer-adagrad"href="#">adagrad</a></li>
+                                    <li><a id="change-Optimizer-momentum"href="#">momentum</a></li>
+                                    <li><a id="change-Optimizer-adam"href="#">adam</a></li>
+                                    <li><a id="change-Optimizer-ftrl"href="#">ftrl</a></li>
+                                    <li><a id="change-Optimizer-rmsprop"href="#">rmsprop</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="change-Optimizer-learningRate" class="input-group oprion-items">
+                            <span class="input-group-addon">Learning rate</span>
+                            <input id="change-Optimizer-learningRate-input" type="text" class="form-control" placeholder="무한 ~ 무한" aria-describedby="value">
+                        </div>
+                    </div>
+
+                    <button id="regularization-btn" type="button" class="btn btn-info" data-toggle="collapse" data-target="#div-regularization">Regularization</button>
+                    <div id="div-regularization" class="collapse">
+                        <div class="oprion-items">
+                            <div class="option-type"><h4>Enable</h4></div>
+                            <div class="btn-group">
+                                <button id="change-regularization-current" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                    False <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a id="change-regularization-enable-false" href="#">False</a></li>
+                                    <li><a id="change-regularization-enable-true" href="#">True</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="change-regularization-lambda" class="input-group oprion-items">
+                            <span class="input-group-addon">Lambda</span>
+                            <input id="change-regularization-lambda-input" type="text" class="form-control" placeholder="0 ~ 1" aria-describedby="value">
+                        </div>
+                    </div>
+
+                    <button id="trainingEpoch-btn" type="button" class="btn btn-info" data-toggle="collapse" data-target="#div-trainingepoch">TrainingEpoch</button>
+                    <div id="div-trainingepoch" class="collapse">
+                        <div id="change-trainingEpoch" class="input-group oprion-items">
+                            <span class="input-group-addon">Training epoch</span>
+                            <input id="change-trainingEpoch-input" type="text" class="form-control" placeholder="1 ~ 무한" aria-describedby="value">
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
