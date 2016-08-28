@@ -32,16 +32,24 @@ function handleDropEvent( event, ui ) {
     var draggable = ui.draggable;
     var wi=$('#leftSideBar').width();
     var ContainerTop =$('#paintContainer').offset().top;
-    console.log(wi);
     if(ui.draggable.attr('id')=="LinearRegression"){
-            console.log(ContainerTop,wi,canvasX, canvasY);
-            var l = new LinearRegression(modelCnt++,canvasX-wi-150,canvasY-ContainerTop);
+            var l = new Regression(modelCnt++,'Linear regression',canvasX-wi-150,canvasY-ContainerTop);
             models.push(l);
             currentSelectedModel=l;
             canvas.add(l.fabricModel);
-            l.fabricModel.x
-            l.optimizer.changeOptimizer('Gradient Descent');
             canvas.renderAll();
+    }else if(ui.draggable.attr('id')=="PolynomialRegression"){
+        var l = new Regression(modelCnt++,'Polynomial regression',canvasX-wi-150,canvasY-ContainerTop);
+        models.push(l);
+        currentSelectedModel=l;
+        canvas.add(l.fabricModel);
+        canvas.renderAll();
+    }else if(ui.draggable.attr('id')=="SoftMaxRegression"){
+        var l = new Regression(modelCnt++,'SoftMax regression',canvasX-wi-150,canvasY-ContainerTop);
+        models.push(l);
+        currentSelectedModel=l;
+        canvas.add(l.fabricModel);
+        canvas.renderAll();
     }
 }
 
@@ -164,5 +172,14 @@ $(document).ready(function(){
         }
     });
 
+
+    //Model delete
+    $('#model-delete-btn').click(function () {
+        //TODO : 메뉴 전부다 사라지게.
+        var curIdx=getModelIdxById(currentSelectedModel.ID);
+        models.splice(curIdx,1);
+        canvas.remove(currentSelectedModel.fabricModel);
+        currentSelectedModel=null;
+    });
 
 });

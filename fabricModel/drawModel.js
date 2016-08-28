@@ -24,6 +24,13 @@ function getModelById(id){
     }
     return null;
 }
+function getModelIdxById(id){
+    for(model in models){
+        console.log(models[model]);
+        if(models[model].ID ===id) return model;
+    }
+    return null;
+}
 
 /*
  Fabric Container Models
@@ -199,23 +206,19 @@ function Regularization(){
         XML.EndNode();
     }
 
-
-
 }
 
 /*
     Last Models
  */
-function LinearRegression(id,pointLeft, pointTop){
+function Regression(id,type,pointLeft, pointTop){
 
     this.ID=id;
-    this.type =  "Linear Regression";
+    this.type = type;
     this.initializer = new Initializer('random_uniform');
     this.optimizer = new Optimizer('gradient descent');
     this.regularization = new Regularization();
     this.training_epoch = 1024;
-
-
 
     //fabric model
     this.fabricModel=new fabric.Group([getContainer(this.type),
@@ -307,7 +310,7 @@ function LinearRegression(id,pointLeft, pointTop){
         {
             var XML=new XMLWriter();
             XML.BeginNode("model");
-            XML.Node("type", "linear_regression");
+            XML.Node("type", this.type);
             this.initializer.toXML(XML);
             this.optimizer.toXML(XML);
             this.regularization.toXML(XML);
