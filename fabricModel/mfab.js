@@ -135,13 +135,13 @@ $(document).ready(function(){
     $('#change-regularization-enable-false').click(function(){
         $('#change-regularization-current').text($(this).text());
         $('#change-regularization-lambda').hide();
-        currentSelectedModel.setRegularizationEnable('False');
+        currentSelectedModel.setRegularizationEnable('false');
     });
     $('#change-regularization-enable-true').click(function(){
         $('#change-regularization-current').text($(this).text());
         $('#change-regularization-lambda').show();
         $('#change-regularization-lambda-input').val(currentSelectedModel.lambda);
-        currentSelectedModel.setRegularizationEnable('True');
+        currentSelectedModel.setRegularizationEnable('true');
     });
     $('#change-regularization-lambda-input').on("change paste keyup", function() {
         currentSelectedModel.setLambda($(this).val());
@@ -150,6 +150,18 @@ $(document).ready(function(){
     //Change Training Epoch
     $('#change-trainingEpoch-input').on("change paste keyup", function() {
         currentSelectedModel.changeTrainingEpoch($(this).val());
+    });
+
+
+
+    //Models To XML
+    $('#footer-toxml-btn').click(function () {
+        console.log('--------------Model -> XML---------------')
+        console.log('//////////Current Model List//////////////');
+        console.log(models.length + '개의 모델들이 있다.');
+        for(var x in models){
+            models[x].toXML();
+        }
     });
 
 

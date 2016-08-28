@@ -131,6 +131,19 @@ function Initializer(type){
     }
 
     //ToXml
+    this.toXML = function(XML){
+        XML.BeginNode("initializer");
+            XML.Node("type",this.type);
+            if(this.type == 'random_uniform'){
+                XML.Node("min",this.max.toString());
+                XML.Node("max",this.min.toString());
+            }
+            else if(this.type == 'random_normal'){
+                XML.Node("value",this.val.toString());
+            }
+            XML.EndNode();
+        XML.EndNode();
+    }
 
 }
 
@@ -156,16 +169,50 @@ function Optimizer(type){
         this.learningRate=rate;
     }
 
+    //ToXml
+    this.toXML = function(XML){
+        XML.BeginNode("optimizer");
+        XML.Node("type",this.type);
+        XML.Node("learning_rate",this.learningRate.toString());
+        XML.EndNode();
+    }
+}
+/*
+    Regularization
+ */
+function Regularization(){
+
+    this.enable = 'false';
+    this.lambda=0;
+
+    this.changeEnable=function(can){
+        this.enable=can;
+    }
+    this.changeLambda = function(val){
+        this.lambda=val;
+    }
+
+    this.toXML = function(XML){
+        XML.BeginNode("regularization");
+            XML.Node("enable",this.enable.toString());
+            if(this.enable=='true') XML.Node("lambda",this.lambda.toString());
+        XML.EndNode();
+    }
+
+
+
 }
 
+/*
+    Last Models
+ */
 function LinearRegression(id,pointLeft, pointTop){
 
     this.ID=id;
     this.type =  "Linear Regression";
     this.initializer = new Initializer('random_uniform');
     this.optimizer = new Optimizer('gradient descent');
-    this.regularization = 'False';
-    this.lambda =0;
+    this.regularization = new Regularization();
     this.training_epoch = 1024;
 
 
@@ -183,7 +230,6 @@ function LinearRegression(id,pointLeft, pointTop){
         currentSelectedModel=getModelById(this.id);
         currentSelectedModel.changeOptionMenu();
     });
-    this.fabricModel.onclick
 
     this.changeOptionMenu =function () {
 
@@ -211,13 +257,13 @@ function LinearRegression(id,pointLeft, pointTop){
 
         //Set Regularization
         $('#regularization-btn').show();
-        $('#change-regularization-current').text(this.regularization);
-        if(this.regularization=="False"){
+        $('#change-regularization-current').text(this.regularization.enable);
+        if(this.regularization=="false"){
             $('#change-regularization-lambda').hide();
         }else{
             $('#change-regularization-lambda').show();
         }
-        $('#change-regularization-lambda-input').val(this.lambda);
+        $('#change-regularization-lambda-input').val(this.regularization.lambda);
         //Set trainingEpoch
         $('#trainingEpoch-btn').show();
         $('#change-trainingEpoch-input').val(this.training_epoch);
@@ -237,11 +283,11 @@ function LinearRegression(id,pointLeft, pointTop){
 
     //change Regularization
     this.setRegularizationEnable =function (can) {
-        this.regularization=can
+        this.regularization.changeEnable(can);
     }
 
     this.setLambda = function(val){
-        this.lambda=val;
+        this.regularization.changeLambda(val);
     }
 
     //change training epoch
@@ -255,14 +301,27 @@ function LinearRegression(id,pointLeft, pointTop){
     }
 
     //makeXML
-    this.writeXML = function () {
-        
+    this.toXML =  function()
+    {
+        try
+        {
+            var XML=new XMLWriter();
+            XML.BeginNode("model");
+            XML.Node("type", "linear_regression");
+            this.initializer.toXML(XML);
+            this.optimizer.toXML(XML);
+            this.regularization.toXML(XML);
+            XML.Node("training_epoch",this.training_epoch.toString());
+            XML.Close();
+            console.log(XML.ToString().replace(/</g,"\n<"));
+        }
+        catch(Err)
+        {
+            alert("Error: " + Err.description);
+        }
+        return true;
     }
 
-    this.getOptionHTML=function(){
-
-
-    }
 
     this.changeOptionMenu();
 }
