@@ -2,6 +2,7 @@
  * Created by 구한모 on 2016-08-16.
  */
 var canvas = new fabric.Canvas('canvas');
+canvas.selection=false;
 var canvasX=0;
 var canvasY=0;
 canvas.on('mouse:move', function(options) {
@@ -64,8 +65,6 @@ function getContainer(algorithmName) {
 
     });
 
-
-
     return this.group;
 }
 
@@ -100,6 +99,9 @@ function getOptionContainer(opName,type){
 
     return this.group;
 }
+
+
+
 
 /*
     Initializer Objects
@@ -325,6 +327,23 @@ function Regression(id,type,pointLeft, pointTop){
         return true;
     }
 
-
     this.changeOptionMenu();
+
+
+}
+
+
+function NeuralNetworks(id,pointLeft, pointTop){
+
+
+
+
+    function getLayer(id,activation,input,output){
+
+        this.id=id;
+        this.activation = activation;
+        this.input = input;
+        this.output = output;
+    }
+
 }
