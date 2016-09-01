@@ -226,7 +226,7 @@ function Regression(id,type,pointLeft, pointTop){
     this.fabricModel=new fabric.Group([getContainer(this.type),
         this.initializer.model,this.optimizer.model]
         ,{
-            left:pointLeft,
+            left: pointLeft,
             top : pointTop
         });
     this.fabricModel.id=this.ID;
@@ -333,17 +333,211 @@ function Regression(id,type,pointLeft, pointTop){
 }
 
 
-function NeuralNetworks(id,pointLeft, pointTop){
 
+/*
+    NeralNetworks model
+ */
 
+function Layer(id,activation,input,output){
+    this.id=id;
+    this.activation = activation;
+    this.input = input;
+    this.output = output;
 
+    this.makeLayer =function(){
+        this.LayerContainer = new fabric.Rect({
+            fill:'#ffffff',
+            rx:10,
+            ry:10,
+            width:150,
+            height:180,
+            stroke:"#1788B5",
+            strokeWidth:2,
+        });
 
-    function getLayer(id,activation,input,output){
+        this.LayerID = new fabric.Text("Layer "+this.id, {
+            fontFamily: 'Comic Sans',
+            fontSize: 20,
+            fill :'#000000',
+            textAlign:'center',
+        });
 
+        this.LayerID.set({
+            left : this.LayerContainer.getWidth()/2 - this.LayerID.getWidth()/2,
+            top : 10,
+        });
+
+        this.Activation = new fabric.Text(this.activation, {
+            fontFamily: 'Comic Sans',
+            fontSize: 20,
+            fill :'#000000',
+            textAlign:'center'
+        });
+        this.Activation.set({
+            left : this.LayerContainer.getWidth()/2 - this.Activation.getWidth()/2,
+            top : 10 + this.LayerContainer.getHeight()/4,
+        });
+
+        this.Input = new fabric.Text("IN : "+this.input, {
+            fontFamily: 'Comic Sans',
+            fontSize: 20,
+            fill :'#000000',
+            textAlign:'center'
+        });
+        this.Input.set({
+            left : this.LayerContainer.getWidth()/2 - this.Input.getWidth()/2,
+            top : 10 + this.LayerContainer.getHeight()/4*2,
+        });
+
+        this.Output = new fabric.Text("OUT :  "+this.output, {
+            fontFamily: 'Comic Sans',
+            fontSize: 20,
+            fill :'#000000',
+            textAlign:'center'
+        });
+
+        this.Output.set({
+            left : this.LayerContainer.getWidth()/2 - this.Output.getWidth()/2,
+            top : 10 + this.LayerContainer.getHeight()/4*3,
+        });
+
+        this.group = new fabric.Group([this.LayerContainer,this.LayerID,this.Activation,this.Input,this.Output], {
+
+        });
+
+        return this.group;
+    }
+
+    this.fabricModel = this.makeLayer();
+
+    this.setId = function(id){
         this.id=id;
-        this.activation = activation;
-        this.input = input;
-        this.output = output;
+        this.fabricModel.getObjects()[1].setText('Layer' +id);
+        // this.model.item(1).set({
+        //     left : -this.model.item(1).getWidth()/2,
+        //     top : -this.model.item(1).getHeight()/2
+        // });
+        canvas.renderAll();
+    }
+}
+
+
+
+
+//Manage Layers
+function LayerSet(){
+
+    this.layers=[new Layer(1,'relu',10,10)];
+
+    this.addLayerFrontOf =function(position){
+        //Shift
+        for(var x = this.layers.length; x>position;x--){
+            this.layers[x] = this.layers[x-1];
+            this.layers[x].setId(x+1);
+        }
+        var newL = new Layer(position+1,'relu',10,10);
+        this.layers[position] =  newL;
+
+        //TODO : Update Canvas UI
+
+
+    }
+
+    this.addLayerBackOf = function (position) {
+        this.addLayerFrontOf(position+1);
+        //TODO : Update Canvas UI
+    }
+
+    this.deleteLayer=function(position){
+        if(this.layerSet.length ==1) return;
+        for(var x=position; x<this.layers.length-1;x++){
+            this.layers[x] = this.layers[x+1];
+            this.layers[x] = x;
+        }
+        //TODO : Update Canvas UI
+    }
+
+    this.fabricModel;
+
+    this.UpdateFabric = function(){
+        var newModel =new fabric.Group([], {
+            left: 15,
+            top : 50
+        });
+
+        for(var x =0; x<this.layers.length;x++){
+            this.layers[x].fabricModel.set({
+                top : 0,
+                left : x* 150 + x*10
+            });
+            newModel.addWithUpdate(this.layers[x].fabricModel);
+        }
+
+        canvas.add(newModel);
+        canvas.renderAll();
     }
 
 }
+
+
+function NeuralContainer(layerN){
+    this.AlgoritmContainer = new fabric.Rect({
+        fill:'#ffffff',
+        rx:10,
+        ry:10,
+        width:300*(layerN+1),
+        height:300,
+        stroke:"#1788B5",
+        strokeWidth:2,
+    });
+
+    this.Algoname = new fabric.Text("Neural Network", {
+        top:10,
+        fontFamily: 'Comic Sans',
+        fontSize: 30,
+        fill :'#008C9E',
+        textAlign:'center',
+    });
+
+    //객체 생성 후에, 가운데정렬
+    this.Algoname.set({
+        left : this.AlgoritmContainer.getWidth()/2 - this.Algoname.getWidth()/2,
+    });
+
+    this.group = new fabric.Group([this.AlgoritmContainer,this.Algoname], {
+
+    });
+
+    return this.group;
+
+}
+
+
+function NeuralNetworks(id,pointLeft, pointTop){
+    this .type = "neural_network"
+    this.layerSet=new LayerSet();
+    this.initializer = new Initializer('random_uniform');
+    this.optimizer = new Optimizer('gradient descent');
+    this.regularization = new Regularization();
+    this.training_epoch = 1024;
+
+
+    this.getContainer= function(){
+        this.container = new NeuralContainer(this.layerSet.length);
+        return this.container;
+    }
+
+    this.fabricModel;
+    this.ID;
+
+
+}
+
+var l = new LayerSet();
+l.addLayerBackOf(0);
+l.addLayerBackOf(0);
+l.addLayerBackOf(0);
+l.addLayerBackOf(0);
+l.addLayerBackOf(0);
+
+l.UpdateFabric();

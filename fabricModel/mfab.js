@@ -11,6 +11,7 @@ function canvaResize (event) {
     canvas.calcOffset();
 }
 window.onresize = canvaResize;
+
 canvaResize();
 canvas.renderAll();
 
