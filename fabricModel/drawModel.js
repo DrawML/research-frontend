@@ -349,15 +349,15 @@ function Layer(id,activation,input,output){
             fill:'#ffffff',
             rx:10,
             ry:10,
-            width:150,
-            height:180,
+            width:120,
+            height:120,
             stroke:"#1788B5",
             strokeWidth:2,
         });
 
         this.LayerID = new fabric.Text("Layer "+this.id, {
             fontFamily: 'Comic Sans',
-            fontSize: 20,
+            fontSize: 15,
             fill :'#000000',
             textAlign:'center',
         });
@@ -369,7 +369,7 @@ function Layer(id,activation,input,output){
 
         this.Activation = new fabric.Text(this.activation, {
             fontFamily: 'Comic Sans',
-            fontSize: 20,
+            fontSize: 15,
             fill :'#000000',
             textAlign:'center'
         });
@@ -380,7 +380,7 @@ function Layer(id,activation,input,output){
 
         this.Input = new fabric.Text("IN : "+this.input, {
             fontFamily: 'Comic Sans',
-            fontSize: 20,
+            fontSize: 15,
             fill :'#000000',
             textAlign:'center'
         });
@@ -391,7 +391,7 @@ function Layer(id,activation,input,output){
 
         this.Output = new fabric.Text("OUT :  "+this.output, {
             fontFamily: 'Comic Sans',
-            fontSize: 20,
+            fontSize: 15,
             fill :'#000000',
             textAlign:'center'
         });
@@ -422,12 +422,12 @@ function Layer(id,activation,input,output){
 }
 
 
-
-
 //Manage Layers
 function LayerSet(){
 
     this.layers=[new Layer(1,'relu',10,10)];
+
+    this.fabricModel =this.layers[0].fabricModel;
 
     this.addLayerFrontOf =function(position){
         //Shift
@@ -449,10 +449,10 @@ function LayerSet(){
     }
 
     this.deleteLayer=function(position){
-        if(this.layerSet.length ==1) return;
-        for(var x=position; x<this.layers.length-1;x++){
-            this.layers[x] = this.layers[x+1];
-            this.layers[x] = x;
+        if(this.layers.length ==1) return;
+        this.layers.splice(position,1);
+        for(var x=0; x<this.layers.length;x++){
+            this.layers[x].setId(x+1);
         }
         //TODO : Update Canvas UI
     }
@@ -468,13 +468,12 @@ function LayerSet(){
         for(var x =0; x<this.layers.length;x++){
             this.layers[x].fabricModel.set({
                 top : 0,
-                left : x* 150 + x*10
+                left : x* 120 + x*10
             });
             newModel.addWithUpdate(this.layers[x].fabricModel);
         }
 
-        canvas.add(newModel);
-        canvas.renderAll();
+        this.fabricModel = newModel;
     }
 
 }
@@ -485,8 +484,8 @@ function NeuralContainer(layerN){
         fill:'#ffffff',
         rx:10,
         ry:10,
-        width:300*(layerN+1),
-        height:300,
+        width:120+130*(layerN),
+        height:250,
         stroke:"#1788B5",
         strokeWidth:2,
     });
@@ -523,21 +522,54 @@ function NeuralNetworks(id,pointLeft, pointTop){
 
 
     this.getContainer= function(){
-        this.container = new NeuralContainer(this.layerSet.length);
+        this.container = new NeuralContainer(this.layerSet.layers.length);
         return this.container;
     }
 
-    this.fabricModel;
-    this.ID;
+    this.fabricModel= new fabric.Group([this.getContainer(),this.layerSet.fabricModel], {
+        // left:pointLeft,
+        // top:pointTop
+    });
+    this.fabricModel.ID=id;
 
+    this.updateFabricModel = function(){
+
+        this.layerSet.UpdateFabric();
+        this.layerSet.fabricModel.set({
+            left:55,
+            top:75
+        });
+        var replaceModel = new fabric.Group([this.getContainer(),this.layerSet.fabricModel], {
+                left:this.fabricModel.left,
+                top:this.fabricModel.top
+        });
+        canvas.remove(this.fabricModel);
+        replaceModel.id= this.fabricModel.id;
+        this.fabricModel = replaceModel;
+        canvas.add(this.fabricModel);
+        canvas.renderAll();
+    }
+
+
+    this.addLayerFrontOf = function(position){
+
+        this.layerSet.addLayerFrontOf(position);
+        this.layerSet.UpdateFabric();
+        this.updateFabricModel();
+
+    }
+
+    this.addLayerBackOf = function(position){
+        this.layerSet.addLayerBackOf(position);
+        this.layerSet.UpdateFabric();
+        this.updateFabricModel();
+    }
+
+    this.deleteLayer = function (position) {
+        this.layerSet.deleteLayer(position);
+        this.layerSet.UpdateFabric();
+        this.updateFabricModel();
+    }
 
 }
 
-var l = new LayerSet();
-l.addLayerBackOf(0);
-l.addLayerBackOf(0);
-l.addLayerBackOf(0);
-l.addLayerBackOf(0);
-l.addLayerBackOf(0);
-
-l.UpdateFabric();
