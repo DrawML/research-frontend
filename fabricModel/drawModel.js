@@ -519,7 +519,7 @@ function NeuralNetworks(id,pointLeft, pointTop){
     this.optimizer = new Optimizer('gradient descent');
     this.regularization = new Regularization();
     this.training_epoch = 1024;
-
+    this.container=null;
 
     this.getContainer= function(){
         this.container = new NeuralContainer(this.layerSet.layers.length);
@@ -527,8 +527,8 @@ function NeuralNetworks(id,pointLeft, pointTop){
     }
 
     this.fabricModel= new fabric.Group([this.getContainer(),this.layerSet.fabricModel], {
-        // left:pointLeft,
-        // top:pointTop
+        left:pointLeft,
+        top:pointTop
     });
     this.fabricModel.ID=id;
 
@@ -536,7 +536,7 @@ function NeuralNetworks(id,pointLeft, pointTop){
 
         this.layerSet.UpdateFabric();
         this.layerSet.fabricModel.set({
-            left:55,
+            left:60,
             top:75
         });
         var replaceModel = new fabric.Group([this.getContainer(),this.layerSet.fabricModel], {
@@ -549,7 +549,6 @@ function NeuralNetworks(id,pointLeft, pointTop){
         canvas.add(this.fabricModel);
         canvas.renderAll();
     }
-
 
     this.addLayerFrontOf = function(position){
 
@@ -571,5 +570,21 @@ function NeuralNetworks(id,pointLeft, pointTop){
         this.updateFabricModel();
     }
 
+
+    this.getLayerLength = function(){
+        return this.layerSet.layers.length;
+    }
+}
+
+function makeLayerOption(LayerNumber){
+    var option = $('#btn-dummy').clone(true);
+    var opionLayer = $('#dummyLayer').clone(true);
+    option.attr('id','btn-layer'+LayerNumber.toString()).show();
+    option.html('Layer'+LayerNumber.toString());
+    option.attr('data-target','#layer'+LayerNumber.toString());
+    opionLayer.attr('id','layer'+LayerNumber.toString());
+    opionLayer.addClass('collapse');
+    $('#model-addlayer-btn').before(option);
+    $('#model-addlayer-btn').before(opionLayer);
 }
 

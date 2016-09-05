@@ -51,6 +51,16 @@ function handleDropEvent( event, ui ) {
         currentSelectedModel=l;
         canvas.add(l.fabricModel);
         canvas.renderAll();
+    }else if(ui.draggable.attr('id')=="NeuralNetworks"){
+        var l = new NeuralNetworks(modelCnt++,canvasX-wi-150,canvasY-ContainerTop);
+        models.push(l);
+        currentSelectedModel=l;
+        canvas.add(l.fabricModel);
+        l.updateFabricModel();
+        canvas.renderAll();
+
+        makeLayerOption(1);
+        $('#model-addlayer-btn').show();
     }
 }
 
@@ -72,6 +82,7 @@ function init() {
 
 $(document).ready(function(){
     //TODO : 처음에 Option메뉴 아무것도 안보이게 해야됨.
+    $('#model-addlayer-btn').hide();
 
     //Change Initializer
     $('#change-Initializer-random_normal').click(function(){
@@ -163,6 +174,8 @@ $(document).ready(function(){
 
 
 
+
+
     //Models To XML
     $('#footer-toxml-btn').click(function () {
         console.log('--------------Model -> XML---------------')
@@ -183,4 +196,14 @@ $(document).ready(function(){
         currentSelectedModel=null;
     });
 
+    $('#model-addlayer-btn').click(function(){
+        if(!(currentSelectedModel instanceof NeuralNetworks)) return;
+        //Option UI 생성
+        makeLayerOption(currentSelectedModel.getLayerLength()+1);
+
+        //모델객체에 레이어 추가.
+        currentSelectedModel.addLayerBackOf(currentSelectedModel.getLayerLength()-1);
+    });
+
 });
+

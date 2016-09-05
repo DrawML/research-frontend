@@ -126,7 +126,10 @@
                     </div>
 
 
-                    <button id="model-delete-btn" type="button" class="btn btn-danger">Delete</button>
+
+                    <button id="model-addlayer-btn" type="button" class="btn btn-warning"> + AddLayer</button>
+                    <button id="model-delete-btn" type="button" class=
+                            "btn btn-danger">Delete</button>
                 </div>
 
             </div>
@@ -145,5 +148,26 @@
     <script type="text/javascript" src="drawModel.js"></script>
     <script type="text/javascript" src="mfab.js"></script>
     </body>
+
+    <button id="btn-dummy" style="display: none" type="button" class="btn btn-info layer" data-toggle="collapse" data-target="#div-layer1">Layer1</button>
+    <div id="dummyLayer" class="collapse layer">
+        <div class="btn-group">
+            <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                relu<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">relu</a></li>
+            </ul>
+        </div>
+        <div class="input-group oprion-items">
+            <span class="input-group-addon">Input</span>
+            <input  type="text" class="form-control" placeholder="1 ~ 무한" aria-describedby="value">
+        </div>
+        <div class="input-group oprion-items">
+            <span class="input-group-addon">Output</span>
+            <input  type="text" class="form-control" placeholder="1 ~ 무한" aria-describedby="value">
+        </div>
+        <button  type="button" class="btn btn-warning">Delete layer</button>
+    </div>
 </html>
 
