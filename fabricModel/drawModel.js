@@ -420,16 +420,25 @@ function Layer(id,activation,input,output){
         canvas.renderAll();
     }
 
+    this.getActivation =function () {
+        if(this.activation==null) return null;
+        else return this.activation.toString();
+    }
+
     this.setActivation = function (type) {
         this.activation=type;
         this.fabricModel.getObjects()[2].setText(type);
         canvas.renderAll();
     }
     this.setLayerInput = function (input) {
-
+        this.input=input;
+        this.fabricModel.getObjects()[3].setText('IN : '+input);
+        canvas.renderAll();
     }
     this.setLayerOutput = function (output) {
-
+        this.output=output;
+        this.fabricModel.getObjects()[4].setText('OUT : '+output);
+        canvas.renderAll();
     }
 }
 
@@ -492,10 +501,10 @@ function LayerSet(){
         this.layers[layer-1].setActivation(type);
     }
     this.setLayerInput = function (layer,input) {
-
+        this.layers[layer-1].setLayerInput(input);
     }
     this.setLayerOutput = function (layer,output) {
-
+        this.layers[layer-1].setLayerOutput(output);
     }
 
 }
@@ -618,6 +627,13 @@ function NeuralNetworks(id,pointLeft, pointTop){
         $('#trainingEpoch-btn').show();
         $('#change-trainingEpoch-input').val(this.training_epoch);
 
+
+        //TODO Layer 반영
+        clearLayerOption();
+        for(var x =0; x<this.layerSet.layers.length;x++) makeLayerOption(x+1);
+        $('#model-addlayer-btn').show();
+
+        //TODO 옵션!
     }
 
 
@@ -639,6 +655,7 @@ function NeuralNetworks(id,pointLeft, pointTop){
         this.layerSet.deleteLayer(position);
         this.layerSet.UpdateFabric();
         this.updateFabricModel();
+        this.changeOptionMenu();
     }
 
 
@@ -675,10 +692,10 @@ function NeuralNetworks(id,pointLeft, pointTop){
         this.layerSet.setActivation(layer,type);
     }
     this.setLayerInput = function (layer,input) {
-        
+        this.layerSet.setLayerInput(layer,input);
     }
     this.setLayerOutput = function (layer,output) {
-
+        this.layerSet.setLayerOutput(layer,output);
     }
 
 }
@@ -703,12 +720,12 @@ function makeLayerOption(LayerNumber){
 
     var inputDiv =optionLayer.children().eq(1).find('input');
     inputDiv.on("change paste keyup", function() {
-        currentSelectedModel.setLayerInput($(this).val());
+        currentSelectedModel.setLayerInput(LayerNumber,$(this).val());
     });
 
-    var outputDiv =optionLayer.children().eq(2).find('output');
+    var outputDiv =optionLayer.children().eq(2).find('input');
     outputDiv.on("change paste keyup", function() {
-        currentSelectedModel.setLayerOutput($(this).val());
+        currentSelectedModel.setLayerOutput(LayerNumber,$(this).val());
     });
 
     var delBtn =optionLayer.children().eq(3);
@@ -719,6 +736,20 @@ function makeLayerOption(LayerNumber){
             optionLayer.hide();
         }
     });
-    
+
+
+    //Read data
+    if(currentSelectedModel.layerSet.layers.length >=LayerNumber) {
+        btngroup.find('button').text(currentSelectedModel.layerSet.layers[LayerNumber - 1].getActivation());
+        inputDiv.val(currentSelectedModel.layerSet.layers[LayerNumber - 1].input);
+        outputDiv.val(currentSelectedModel.layerSet.layers[LayerNumber - 1].output);
+    }
 }
 
+
+function clearLayerOption(){
+    //NN 관련  UI 삭제
+    var curUI = $('#trainingEpoch-btn');
+    curUI.nextAll().filter('.layer').remove();
+    $('#model-addlayer-btn').hide();
+}
