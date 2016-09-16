@@ -1,21 +1,4 @@
 /////////////////////////////////////////////
-/////////Canvas fit to Window////////////////
-/////////////////////////////////////////////
-function canvaResize (event) {
-    var canvasConiner = document.getElementById('canvasContaianer');
-    var mid = document.getElementById('mid');
-    var head = document.getElementById('nav_head');
-    var foot = document.getElementById('nav_footer')
-    canvas.setWidth(canvasConiner.clientWidth);
-    canvas.setHeight(mid.clientHeight-head.clientHeight-foot.clientHeight);
-    canvas.calcOffset();
-}
-window.onresize = canvaResize;
-
-canvaResize();
-canvas.renderAll();
-
-/////////////////////////////////////////////
 ////////////Drag & Drop Event Handler////////
 /////////////////////////////////////////////
 $( init );
