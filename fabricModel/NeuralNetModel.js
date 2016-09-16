@@ -108,6 +108,16 @@ function Layer(id,activation,input,output){
         this.fabricModel.getObjects()[4].setText('OUT : '+output);
         canvas.renderAll();
     }
+
+    this.toXML = function(XML){
+        XML.BeginNode("layer");
+        XML.Attrib("id",this.id.toString());
+        XML.Node("type","none");
+        XML.Node("activation",this.activation);
+        XML.Node("input",this.input.toString());
+        XML.Node("output",this.output.toString());
+        XML.EndNode();
+    }
 }
 
 
@@ -115,9 +125,7 @@ function Layer(id,activation,input,output){
 function LayerSet(){
 
     this.layers=[new Layer(1,'relu',10,10)];
-
     this.fabricModel =this.layers[0].fabricModel;
-
     this.addLayerFrontOf =function(position){
         //Shift
         for(var x = this.layers.length; x>position;x--){
@@ -128,8 +136,6 @@ function LayerSet(){
         this.layers[position] =  newL;
 
         //TODO : Update Canvas UI
-
-
     }
 
     this.addLayerBackOf = function (position) {
@@ -174,6 +180,16 @@ function LayerSet(){
     this.setLayerOutput = function (layer,output) {
         this.layers[layer-1].setLayerOutput(output);
     }
+
+    this.toXML = function(XML){
+        XML.BeginNode("layer_set");
+        XML.Node("size",this.layers.length.toString());
+        for(var x=0; x<this.layers.length;x++){
+            this.layers[x].toXML(XML);
+        }
+        XML.EndNode();
+    }
+
 
 }
 
@@ -365,6 +381,31 @@ function NeuralNetworks(id,pointLeft, pointTop){
     this.setLayerOutput = function (layer,output) {
         this.layerSet.setLayerOutput(layer,output);
     }
+
+    this.toXML =  function()
+    {
+        try
+        {
+            var XML=new XMLWriter();
+            XML.BeginNode("model");
+                XML.Node("type", "neural_network");
+                this.layerSet.toXML(XML);
+                this.initializer.toXML(XML);
+                this.optimizer.toXML(XML);
+                this.regularization.toXML(XML);
+                XML.Node("training_epoch",this.training_epoch.toString());
+            XML.EndNode();
+            XML.Close();
+            console.log(XML.ToString().replace(/</g,"\n<"));
+        }
+        catch(Err)
+        {
+            alert("Error: " + Err.description);
+        }
+        return true;
+    }
+
+
 
 }
 
