@@ -120,7 +120,6 @@ function Initializer(type){
             XML.Node("value",this.val.toString());
         }
         XML.EndNode();
-        XML.EndNode();
     }
 
 }
