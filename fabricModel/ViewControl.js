@@ -41,8 +41,16 @@ function handleDropEvent( event, ui ) {
         canvas.add(l.fabricModel);
         l.updateFabricModel();
         canvas.renderAll();
-
         makeLayerOption(1);
+        $('#model-addlayer-btn').show();
+    }else if(ui.draggable.attr('id')=="ConvolutionNeuralNet"){
+        var l = new ConvolutionNeuralNetworks(modelCnt++,canvasX-wi-150,canvasY-ContainerTop);
+        models.push(l);
+        currentSelectedModel=l;
+        canvas.add(l.fabricModel);
+        l.updateFabricModel();
+        canvas.renderAll();
+        //makeLayerOption(1);
         $('#model-addlayer-btn').show();
     }
 }
