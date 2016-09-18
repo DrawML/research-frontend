@@ -461,4 +461,12 @@ function clearLayerOption(){
     var curUI = $('#trainingEpoch-btn');
     curUI.nextAll().filter('.layer').remove();
     $('#model-addlayer-btn').hide();
+
+    //TODO : CNN 관련 UI 삭제
+
 }
+
+
+
+
+

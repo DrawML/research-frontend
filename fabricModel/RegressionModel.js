@@ -206,6 +206,8 @@ function Regression(id,type,pointLeft, pointTop){
 
     this.changeOptionMenu =function () {
 
+        clearLayerOption();
+
         //Set Initializer
         $('#initializer-btn').show();
         var iniType = this.initializer.type;
