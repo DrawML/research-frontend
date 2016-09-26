@@ -30,7 +30,11 @@
         <div id="map" class="row">
             <div id="paintContainer" class="col-sm-12  col-md-12">
                 <div id="leftSideBar" class="col-sm-2 col-md-2 sidebar">
-                    <div class="list-group">
+                    <ul id="leftSideBar_nav_pills" class="nav nav-pills">
+                        <li id="model_select_view" role="presentation"class="active" ><a href="#">Model</a></li>
+                        <li id="data_select_view" role="presentation" ><a href="#">Data</a></li>
+                    </ul>
+                    <div id="model_group" class="list-group">
                         <div id="LinearRegression" class="list-group-item">LinearRegression</div>
                         <div id="PolynomialRegression" class="list-group-item">PolynomialRegression</div>
                         <div id="SoftMaxRegression" class="list-group-item">SoftMaxRegression</div>
@@ -38,6 +42,19 @@
                         <div id="ConvolutionNeuralNet" class="list-group-item">ConvolutionNeuralNet</div>
                         <div id="RecurrentNeuralNet" class="list-group-item">RecurrentNeuralNet</div>
                      </div>
+                    <div id="data_preprocessing_group" class="list-group">
+                        <div class="list-group-item">데이터 전처리 1</div>
+                        <div class="list-group-item">데이터 전처리 2</div>
+                        <div class="list-group-item">데이터 전처리 3</div>
+                        <div class="list-group-item">데이터 전처리 4</div>
+                    </div>
+
+                    <div id="data_user_group" class="list-group">
+                        <div class="list-group-item">나의 데이터 1</div>
+                        <div class="list-group-item">나의 데이터 2</div>
+                        <div class="list-group-item">나의 데이터 3</div>
+                        <div class="list-group-item">나의 데이터 4</div>
+                    </div>
                 </div>
                 <div id="canvasContaianer" class ="col-sm-8 col-md-8">
                     <canvas id="canvas" width="100" height="100"></canvas>

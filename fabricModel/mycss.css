@@ -14,16 +14,29 @@ canvas{
 }
 
 #rightSiedBar{
-    right:0px;
-    height:100%;
+    right:20px;
+    height:85%;
     background: #ffffff;
     border: 2px solid darkblue;
     border-radius: 5px;
     text-align: center;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    min-width: 217px;
+    position:fixed;
+
+
 }
 
 #leftSideBar{
     background: #ffffff;
+    height:100%;
+    width: 217px;
+}
+
+#leftSideBar_nav_pills{
+    width: 217px;
+    margin-bottom: 10px;
 }
 
 #draggableHelper {
@@ -34,7 +47,7 @@ canvas{
     display: table;
 }
 
-#rightSiedBar .btn-info{
+.btn-info{
     width:100%;
     margin:2px;
 }

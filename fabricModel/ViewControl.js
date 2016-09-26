@@ -72,7 +72,39 @@ function init() {
 /////////////////////////////////////////////
 
 $(document).ready(function(){
-    //TODO : 처음에 Option메뉴 아무것도 안보이게 해야됨.
+
+
+    //왼쪽 탭 설정
+    $('#model_group').show();
+    $('#data_preprocessing_group').hide();
+    $('#data_user_group').hide();
+
+    $('#model_select_view').click(function(){
+        if($(this).hasClass(".active")===true) return;
+        else {
+            $(this).addClass("active");
+            $('#data_select_view').removeClass("active");
+
+            $('#model_group').show();
+            $('#data_preprocessing_group').hide();
+            $('#data_user_group').hide();
+        }
+    });
+
+    $('#data_select_view').click(function(){
+        if($(this).hasClass(".active")===true) return;
+        else {
+            $(this).addClass("active");
+            $('#model_select_view').removeClass("active");
+
+            $('#model_group').hide();
+            $('#data_preprocessing_group').show();
+            $('#data_user_group').show();
+        }
+    });
+
+
+
     $('#model-addlayer-btn').hide();
 
     //Change Initializer
