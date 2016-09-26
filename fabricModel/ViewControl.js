@@ -50,7 +50,7 @@ function handleDropEvent( event, ui ) {
         canvas.add(l.fabricModel);
         l.updateFabricModel();
         canvas.renderAll();
-        //makeLayerOption(1);
+        makeCNNLayerOption(1);
         $('#model-addlayer-btn').show();
     }
 }
@@ -108,6 +108,7 @@ $(document).ready(function(){
     });
 
 
+    //TODO : ?????????????????????이게뭐
     //Change Optimizer
     $('#change-Optimizer-gradientDescent').click(function(){
         $('#change-Optimizer-current').text($(this).text());
@@ -180,7 +181,7 @@ $(document).ready(function(){
 
     //Model delete
     $('#model-delete-btn').click(function () {
-        //TODO : 메뉴 전부다 사라지게.
+        clearLayerOption();
         var curIdx=getModelIdxById(currentSelectedModel.ID);
         models.splice(curIdx,1);
         canvas.remove(currentSelectedModel.fabricModel);
@@ -188,12 +189,17 @@ $(document).ready(function(){
     });
 
     $('#model-addlayer-btn').click(function(){
-        if(!(currentSelectedModel instanceof NeuralNetworks)) return;
-        //Option UI 생성
-        makeLayerOption(currentSelectedModel.getLayerLength()+1);
+        if((currentSelectedModel instanceof NeuralNetworks)) {
+            //Option UI 생성
+            makeLayerOption(currentSelectedModel.getLayerLength() + 1);
+            //모델객체에 레이어 추가.
+            currentSelectedModel.addLayerBackOf(currentSelectedModel.getLayerLength() - 1);
+        }else if(currentSelectedModel instanceof ConvolutionNeuralNetworks){
+            makeCNNLayerOption(currentSelectedModel.getLayerLength()+1);
+            currentSelectedModel.addLayerBackOf(currentSelectedModel.getLayerLength() - 1);
+        }
 
-        //모델객체에 레이어 추가.
-        currentSelectedModel.addLayerBackOf(currentSelectedModel.getLayerLength()-1);
+
     });
 
 });

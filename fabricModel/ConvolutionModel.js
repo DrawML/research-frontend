@@ -27,11 +27,17 @@ function CNNActivation(type,sv,sh,pad){
     this.padding= typeof pad !=='undefined' ? pad:"same";
 
 
-    this.changeValue = function (type,sv,sh,pad) {
+    this.changeType = function (type) {
         this.type = type;
-        this.strides_vertical= sv;
-        this.strides_horizontal= sh;
-        this.padding= pad;
+    }
+    this.changeSV = function(sv){
+        this.strides_vertical=sv;
+    }
+    this.changeSH = function(sh){
+        this.strides_horizontal=sh;
+    }
+    this.changePadding = function(pad){
+        this.padding=pad;
     }
 
     this.toXML = function(XML){
@@ -47,15 +53,21 @@ function CNNActivation(type,sv,sh,pad){
 function CNNPooling(type,sv,sh,pad){
     this.type = typeof type !=='undefined' ? type:"max";
     this.strides_vertical= typeof sv !=='undefined' ? sv:2;
-    this.strides_horizontal= typeof sh !=='undefined' ? sh:2;
+    this.strides_horizontal=typeof sh !=='undefined' ? sh:2;
     this.padding= typeof pad !=='undefined' ? pad:"same";
 
 
-    this.changeValue = function (type,sv,sh,pad) {
+    this.changeType = function (type) {
         this.type = type;
-        this.strides_vertical= sv;
-        this.strides_horizontal= sh;
-        this.padding= pad;
+    }
+    this.changeSV = function(sv){
+        this.strides_vertical=sv;
+    }
+    this.changeSH = function(sh){
+        this.strides_horizontal=sh;
+    }
+    this.changePadding = function(pad){
+        this.padding=pad;
     }
 
     this.toXML = function(XML){
@@ -190,16 +202,34 @@ function CNNLayer(id,activation,pooling,inputX,inputY,inputZ,output){
         canvas.renderAll();
     }
 
-    this.setActivation = function (type,sv,sh,pad) {
-        this.activation.changeValue(type,sv,sh,pad);
+    this.setActivationType = function (type) {
+        this.activation.changeType(type);
         this.fabricModel.getObjects()[2].setText(type);
         canvas.renderAll();
     }
+    this.setActivationSV = function (sv) {
+        this.activation.changeSV(sv);
+    }
+    this.setActivationSH = function (sh) {
+        this.activation.changeSH(sh);
+    }
+    this.setActivationPadding = function (pad) {
+        this.activation.changePadding(pad);
+    }
 
-    this.setPooling = function (type,sv,sh,pad) {
-        this.pooling.changeValue(type,sv,sh,pad);
+    this.setPoolingType = function (type) {
+        this.pooling.changeValue(type);
         this.fabricModel.getObjects()[3].setText(type);
         canvas.renderAll();
+    }
+    this.setActivationSV = function (sv) {
+        this.pooling.changeSV(sv);
+    }
+    this.setActivationSH = function (sh) {
+        this.pooling.changeSH(sh);
+    }
+    this.setActivationPadding = function (pad) {
+        this.pooling.changePadding(pad);
     }
 
     this.setLayerInputX = function (input) {
@@ -223,6 +253,13 @@ function CNNLayer(id,activation,pooling,inputX,inputY,inputZ,output){
         this.output=output;
         this.fabricModel.getObjects()[7].setText('OUT : '+output);
         canvas.renderAll();
+    }
+
+    this.getActivation = function(){
+        return this.activation;
+    }
+    this.getPooling = function(){
+        return this.pooling;
     }
 
     this.toXML = function(XML){
@@ -298,12 +335,30 @@ function CNNLayerSet(){
         this.fabricModel = newModel;
     }
 
-    this.setActivation = function (layer,type,sv,sh,pad) {
-        this.layers[layer-1].setActivation(type,sv,sh,pad);
+    this.setActivationType = function (layer,type) {
+        this.layers[layer-1].setActivationType(type);
+    }
+    this.setActivationSV = function (layer,sv) {
+        this.layers[layer-1].setActivationSV(sv);
+    }
+    this.setActivationSH = function (layer,type,sv,sh,pad) {
+        this.layers[layer-1].setActivationSH(sh);
+    }
+    this.setActivationPadding = function (layer,type,sv,sh,pad) {
+        this.layers[layer-1].setActivationPadding(pad);
     }
 
-    this.setPooling = function (layer,type,sv,sh,pad) {
-        this.layers[layer-1].setPooling(type,sv,sh,pad);
+    this.setPoolingType = function (layer,type) {
+        this.layers[layer-1].setPoolingType(type);
+    }
+    this.setPoolingSV = function (layer,sv) {
+        this.layers[layer-1].setPoolingSV(sv);
+    }
+    this.setPoolingSH = function (layer,type,sv,sh,pad) {
+        this.layers[layer-1].setPoolingSH(sh);
+    }
+    this.setPoolingPadding = function (layer,type,sv,sh,pad) {
+        this.layers[layer-1].setPoolingPadding(pad);
     }
 
     this.setLayerInputX = function (layer,input) {
@@ -448,12 +503,11 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
         $('#change-trainingEpoch-input').val(this.training_epoch);
 
 
-        clearLayerOption();
-        // TODO
-        // for(var x =0; x<this.layerSet.layers.length;x++) makeLayerOption(x+1);
         $('#model-addlayer-btn').show();
 
-        //TODO 옵션!
+
+        clearLayerOption();
+        for(var x =0; x<this.layerSet.layers.length;x++) makeCNNLayerOption(x+1);
     }
 
 
@@ -510,12 +564,30 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
         this.dropOut.changeValue(conv,hidden);
     }
 
-    this.setActivation = function (layer,type,sv,sh,pad){
-        this.layerSet.setActivation(layer,type,sv,sh,pad);
+    this.setActivationType = function (layer,type,sv,sh,pad){
+        this.layerSet.setActivationType(layer,type);
+    }
+    this.setActivationSV = function (layer,type,sv,sh,pad){
+        this.layerSet.setActivationSV(layer,sv);
+    }
+    this.setActivationSH = function (layer,type,sv,sh,pad){
+        this.layerSet.setActivationSH(layer,sh);
+    }
+    this.setActivationPadding = function (layer,type,sv,sh,pad){
+        this.layerSet.setActivationPadding(layer,pad);
     }
 
-    this.setPooling = function (layer,type,sv,sh,pad){
-        this.layerSet.setPooling(layer,type,sv,sh,pad);
+    this.setPoolingType = function (layer,type,sv,sh,pad){
+        this.layerSet.setPoolingType(layer,type);
+    }
+    this.setPoolingSV = function (layer,type,sv,sh,pad){
+        this.layerSet.setPoolingSV(layer,sv);
+    }
+    this.setPoolingSH = function (layer,type,sv,sh,pad){
+        this.layerSet.setPoolingSH(layer,sh);
+    }
+    this.setPoolingPadding = function (layer,type,sv,sh,pad){
+        this.layerSet.setPoolingPadding(layer,pad);
     }
 
     this.setLayerInputX = function (layer,input) {
@@ -559,3 +631,143 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
     }
 }
 
+function makeCNNLayerOption(LayerNumber){
+
+    var option = $('#btn-dummy2').clone(true);
+    var optionLayer = $('#dummyLayer2').clone(true);
+    option.attr('id','btn-layer'+LayerNumber.toString()).show();
+    option.html('CNNLayer'+LayerNumber.toString());
+    option.attr('data-target','#CNNlayer'+LayerNumber.toString());
+    optionLayer.attr('id','CNNlayer'+LayerNumber.toString());
+    optionLayer.addClass('collapse');
+    $('#model-addlayer-btn').before(option);
+    $('#model-addlayer-btn').before(optionLayer);
+
+    //Event Handling
+
+    var activationGroupBtn = optionLayer.children().eq(0);
+    var activationGroupDiv = optionLayer.children().eq(1);
+    activationGroupBtn.attr('id','btn-activation'+LayerNumber.toString());
+    activationGroupBtn.attr('data-target','#div-cnnActivation'+LayerNumber.toString());
+    activationGroupDiv.attr('id','div-cnnActivation'+LayerNumber.toString());
+    //activationGroupDiv.addClass('collapse');
+
+
+    var poolingGroupBtn = optionLayer.children().eq(2);
+    var poolingGroupDiv = optionLayer.children().eq(3);
+    poolingGroupBtn.attr('id','btn-pooling'+LayerNumber.toString());
+    poolingGroupBtn.attr('data-target','#div-cnnPooling'+LayerNumber.toString());
+    poolingGroupDiv.attr('id','div-cnnPooling'+LayerNumber.toString());
+    //poolingGroupDiv.addClass('collapse');
+
+
+    //Event Handling
+
+
+    //Activation Menu
+    var activationTypeGroup = activationGroupDiv.children().eq(0);
+    var activationTypeBtn = activationTypeGroup.children().eq(1).find('button');
+    var activationTypeChoice =activationTypeGroup.children().eq(1);
+    activationTypeChoice.find('a').click(function () {
+        activationTypeBtn.text($(this).text());
+        currentSelectedModel.setActivationType(LayerNumber,$(this),text());
+    });
+
+    var activationPaddingGroup = activationGroupDiv.children().eq(3);
+    var activationPaddingBtn = activationPaddingGroup.children().eq(1).find('button');
+    var activationPaddingChoice = activationPaddingGroup.children().eq(1);
+    activationPaddingChoice.find('a').click(function () {
+        activationPaddingBtn.text($(this).text());
+        currentSelectedModel.setActivationPadding(LayerNumber,$(this),text());
+    });
+
+    var activationStrideV = activationGroupDiv.children().eq(1).find('input');
+    activationStrideV.on("change paste keyup", function() {
+        currentSelectedModel.setActivationSV(LayerNumber,$(this).val());
+    });
+    var activationStrideH = activationGroupDiv.children().eq(2).find('input');
+    activationStrideH.on("change paste keyup", function() {
+        currentSelectedModel.setActivationSH(LayerNumber,$(this).val());
+    });
+
+
+    //PoolingMenu
+    var poolingTypeGroup = poolingGroupDiv.children().eq(0);
+    var poolingTypeBtn = poolingTypeGroup.children().eq(1).find('button');
+    var poolingTypeChoice =poolingTypeGroup.children().eq(1);
+    poolingTypeChoice.find('a').click(function () {
+        poolingTypeBtn.text($(this).text());
+        currentSelectedModel.setPoolingType(LayerNumber,$(this),text());
+    });
+
+    var poolingPaddingGroup = poolingGroupDiv.children().eq(3);
+    var poolingPaddingBtn = poolingPaddingGroup.children().eq(1).find('button');
+    var poolingPaddingChoice = poolingPaddingGroup.children().eq(1);
+    poolingPaddingChoice.find('a').click(function () {
+        poolingPaddingBtn.text($(this).text());
+        currentSelectedModel.setPoolingPadding(LayerNumber,$(this),text());
+    });
+
+    var poolingStrideV = poolingGroupDiv.children().eq(1).find('input');
+    poolingStrideV.on("change paste keyup", function() {
+        currentSelectedModel.setPoolingSV(LayerNumber,$(this).val());
+    });
+    var poolingStrideH = poolingGroupDiv.children().eq(2).find('input');
+    poolingStrideH.on("change paste keyup", function() {
+        currentSelectedModel.setPoolingSH(LayerNumber,$(this).val());
+    });
+
+
+    var inputXDiv =optionLayer.children().eq(4).find('input');
+    inputXDiv.on("change paste keyup", function() {
+        currentSelectedModel.setLayerInputX(LayerNumber,$(this).val());
+    });
+
+    var inputYDiv =optionLayer.children().eq(5).find('input');
+    inputYDiv.on("change paste keyup", function() {
+        currentSelectedModel.setLayerInputY(LayerNumber,$(this).val());
+    });
+
+    var inputZDiv =optionLayer.children().eq(6).find('input');
+    inputZDiv.on("change paste keyup", function() {
+        currentSelectedModel.setLayerInputZ(LayerNumber,$(this).val());
+    });
+
+    var outputDiv =optionLayer.children().eq(7).find('input');
+    outputDiv.on("change paste keyup", function() {
+        currentSelectedModel.setLayerOutput(LayerNumber,$(this).val());
+    });
+
+
+    var delBtn =optionLayer.children().eq(8);
+    delBtn.click(function(){
+        currentSelectedModel.deleteLayer(LayerNumber);
+        if(LayerNumber!=1) {
+            option.hide();
+            optionLayer.hide();
+        }
+    });
+
+    //Read data
+    if(currentSelectedModel.layerSet.layers.length >=LayerNumber) {
+        var tempActivation =currentSelectedModel.layerSet.layers[LayerNumber - 1].getActivation();
+        activationTypeBtn.text(tempActivation.type.toString());
+        activationPaddingBtn.text(tempActivation.padding.toString());
+        activationStrideV.val(tempActivation.strides_vertical.toString());
+        activationStrideH.val(tempActivation.strides_horizontal.toString());
+
+
+        var tempPooling =currentSelectedModel.layerSet.layers[LayerNumber - 1].getPooling();
+        poolingTypeBtn.text(tempPooling.type.toString());
+        poolingPaddingBtn.text(tempPooling.padding.toString());
+        poolingStrideV.val(tempPooling.strides_vertical.toString());
+        poolingStrideH.val(tempPooling.strides_horizontal.toString());
+
+        inputXDiv.val(currentSelectedModel.layerSet.layers[LayerNumber - 1].inputX);
+        inputYDiv.val(currentSelectedModel.layerSet.layers[LayerNumber - 1].inputY);
+        inputZDiv.val(currentSelectedModel.layerSet.layers[LayerNumber - 1].inputZ);
+        outputDiv.val(currentSelectedModel.layerSet.layers[LayerNumber - 1].output);
+    }
+
+
+}
