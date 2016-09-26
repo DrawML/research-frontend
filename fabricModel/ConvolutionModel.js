@@ -266,8 +266,8 @@ function CNNLayer(id,activation,pooling,inputX,inputY,inputZ,output){
         XML.BeginNode("layer");
         XML.Attrib("id",this.id.toString());
         XML.Node("type","convolution");
-        this.activation.toXML();
-        this.pooling.toXML();
+        this.activation.toXML(XML);
+        this.pooling.toXML(XML);
         XML.Node("input_x",this.inputX.toString());
         XML.Node("input_y",this.inputY.toString());
         XML.Node("input_z",this.inputZ.toString());
@@ -613,7 +613,7 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
             var XML=new XMLWriter();
             XML.BeginNode("model");
             XML.Node("type", "convolution_neural_network");
-            this.dropOut.toXML();
+            this.dropOut.toXML(XML);
             this.layerSet.toXML(XML);
             this.initializer.toXML(XML);
             this.optimizer.toXML(XML);
