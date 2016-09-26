@@ -21,17 +21,19 @@ canvas{
     border-radius: 5px;
     text-align: center;
     overflow-x:hidden;
-    overflow-y:scroll;
     min-width: 217px;
     position:fixed;
-
-
 }
 
 #leftSideBar{
     background: #ffffff;
-    height:100%;
+    height:90%;
     width: 217px;
+}
+
+#leftSideBar_Item_Container{
+    height: 100%;
+    overflow-x: scroll;
 }
 
 #leftSideBar_nav_pills{
