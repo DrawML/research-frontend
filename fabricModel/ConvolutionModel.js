@@ -503,10 +503,8 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
         $('#change-trainingEpoch-input').val(this.training_epoch);
 
 
-        $('#model-addlayer-btn').show();
-
-
         clearLayerOption();
+        $('#model-addlayer-btn').show();
         for(var x =0; x<this.layerSet.layers.length;x++) makeCNNLayerOption(x+1);
     }
 
