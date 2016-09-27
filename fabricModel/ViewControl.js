@@ -3,7 +3,12 @@
 /////////////////////////////////////////////
 $( init );
 function myHelper(event) {
-    var iid= $(this).attr('id');
+    var iid= $(this).text();
+    if($(this).hasClass('dataPreprocess') || $(this).hasClass('data')){
+        return '<div id="dataDraggableHelper">'+
+            '<h3 style="display: table-cell;vertical-align: middle;text-align: center;">'+iid+'</h3>'+
+            '</div>';
+    }
     return '<div id="draggableHelper">'+
         '<h3 style="display: table-cell;vertical-align: middle;text-align: center">'+iid+'</h3>'+
         '</div>';
@@ -17,24 +22,36 @@ function handleDropEvent( event, ui ) {
     var wi=$('#leftSideBar').width();
     var ContainerTop =$('#paintContainer').offset().top;
     if(ui.draggable.attr('id')=="LinearRegression"){
+        clearDataShapeOption();
+        clearLayerOption();
+        makeDefaultOptions()
             var l = new Regression(modelCnt++,'Linear regression',canvasX-wi-150,canvasY-ContainerTop);
             models.push(l);
             currentSelectedModel=l;
             canvas.add(l.fabricModel);
             canvas.renderAll();
     }else if(ui.draggable.attr('id')=="PolynomialRegression"){
+        clearDataShapeOption();
+        clearLayerOption();
+        makeDefaultOptions()
         var l = new Regression(modelCnt++,'Polynomial regression',canvasX-wi-150,canvasY-ContainerTop);
         models.push(l);
         currentSelectedModel=l;
         canvas.add(l.fabricModel);
         canvas.renderAll();
     }else if(ui.draggable.attr('id')=="SoftMaxRegression"){
+        clearDataShapeOption();
+        clearLayerOption();
+        makeDefaultOptions()
         var l = new Regression(modelCnt++,'SoftMax regression',canvasX-wi-150,canvasY-ContainerTop);
         models.push(l);
         currentSelectedModel=l;
         canvas.add(l.fabricModel);
         canvas.renderAll();
     }else if(ui.draggable.attr('id')=="NeuralNetworks"){
+        clearLayerOption();
+        clearDataShapeOption();
+        makeDefaultOptions()
         var l = new NeuralNetworks(modelCnt++,canvasX-wi-150,canvasY-ContainerTop);
         models.push(l);
         currentSelectedModel=l;
@@ -44,6 +61,9 @@ function handleDropEvent( event, ui ) {
         makeLayerOption(1);
         $('#model-addlayer-btn').show();
     }else if(ui.draggable.attr('id')=="ConvolutionNeuralNet"){
+        clearLayerOption();
+        clearDataShapeOption();
+        makeDefaultOptions()
         var l = new ConvolutionNeuralNetworks(modelCnt++,canvasX-wi-150,canvasY-ContainerTop);
         models.push(l);
         currentSelectedModel=l;
@@ -52,6 +72,24 @@ function handleDropEvent( event, ui ) {
         canvas.renderAll();
         makeCNNLayerOption(1);
         $('#model-addlayer-btn').show();
+    }else if(ui.draggable.hasClass('dataPreprocess')){
+        clearLayerOption();
+        clearDataShapeOption();
+        clearDefaultOptions();
+        var l = new DataPreprocessingModel(modelCnt++,ui.draggable.text(),canvasX-wi-150,canvasY-ContainerTop);
+        models.push(l);
+        currentSelectedModel=l;
+        canvas.add(l.fabricModel);
+        canvas.renderAll();
+    }else if(ui.draggable.hasClass('data')){
+        clearLayerOption();
+        makeDataShapeOption();
+        clearDefaultOptions();
+        var l = new InputModel(modelCnt++,ui.draggable.text(),canvasX-wi-150,canvasY-ContainerTop);
+        models.push(l);
+        currentSelectedModel=l;
+        canvas.add(l.fabricModel);
+        canvas.renderAll();
     }
 }
 
@@ -73,6 +111,8 @@ function init() {
 
 $(document).ready(function(){
 
+    clearDefaultOptions();
+    clearDataShapeOption();
 
     //왼쪽 탭 설정
     $('#model_group').show();
@@ -210,7 +250,6 @@ $(document).ready(function(){
         }
     });
 
-
     //Model delete
     $('#model-delete-btn').click(function () {
         clearLayerOption();
@@ -230,9 +269,18 @@ $(document).ready(function(){
             makeCNNLayerOption(currentSelectedModel.getLayerLength()+1);
             currentSelectedModel.addLayerBackOf(currentSelectedModel.getLayerLength() - 1);
         }
-
-
     });
+
+
+    //Data INPUT EVENT
+
+    $('#change-datashape-x-input').on("change paste keyup", function() {
+        currentSelectedModel.changeShapeX($(this).val());
+    });
+    $('#change-datashape-y-input').on("change paste keyup", function() {
+        currentSelectedModel.changeSHapeY($(this).val());
+    });
+
 
 });
 

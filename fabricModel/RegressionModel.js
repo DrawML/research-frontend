@@ -205,7 +205,7 @@ function Regression(id,type,pointLeft, pointTop){
     });
 
     this.changeOptionMenu =function () {
-
+        clearDataShapeOption();
         clearLayerOption();
 
         //Set Initializer
@@ -302,3 +302,23 @@ function Regression(id,type,pointLeft, pointTop){
 
 }
 
+function clearDefaultOptions(){
+    $('#initializer-btn').hide();
+    $('#div-initializer').collapse("hide");
+    $('#optimizer-btn').hide();
+    $('#div-optimizer').collapse("hide");
+    $('#regularization-btn').hide();
+    $('#div-regularization').collapse("hide");
+    $('#trainingEpoch-btn').hide();
+    $('#div-trainingepoch').collapse("hide");
+}
+function makeDefaultOptions(){
+    $('#initializer-btn').show();
+    $('#initializer-btn').addClass('collapsed');
+    $('#optimizer-btn').show();
+    $('#optimizer-btn').addClass('collapsed');
+    $('#regularization-btn').show();
+    $('#regularization-btn').addClass('collapsed');
+    $('#trainingEpoch-btn').show();
+    $('#trainingEpoch-btn').addClass('collapsed');
+}

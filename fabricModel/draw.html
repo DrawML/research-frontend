@@ -19,7 +19,6 @@
              role="navigation">
             <div class="container-fluid">
                 <a class="navbar-brand">DrawML</a>
-                <button type="button" class="btn btn-default navbar-btn">Sign in</button>
                 <p class="navbar-text pull-right">Stacker</p>
 
             </div>
@@ -43,17 +42,17 @@
                         <div id="RecurrentNeuralNet" class="list-group-item">RecurrentNeuralNet</div>
                      </div>
                     <div id="data_preprocessing_group" class="list-group">
-                        <div class="list-group-item">데이터 전처리 1</div>
-                        <div class="list-group-item">데이터 전처리 2</div>
-                        <div class="list-group-item">데이터 전처리 3</div>
-                        <div class="list-group-item">데이터 전처리 4</div>
+                        <div class="list-group-item dataPreprocess">concat</div>
+                        <div class="list-group-item dataPreprocess">transpose</div>
+                        <div class="list-group-item dataPreprocess">데이터 전처리 3</div>
+                        <div class="list-group-item dataPreprocess">데이터 전처리 4</div>
                     </div>
 
                     <div id="data_user_group" class="list-group">
-                        <div class="list-group-item">나의 데이터 1</div>
-                        <div class="list-group-item">나의 데이터 2</div>
-                        <div class="list-group-item">나의 데이터 3</div>
-                        <div class="list-group-item">나의 데이터 4</div>
+                        <div class="list-group-item data">나의 데이터 1</div>
+                        <div class="list-group-item data">나의 데이터 2</div>
+                        <div class="list-group-item data">나의 데이터 3</div>
+                        <div class="list-group-item data">나의 데이터 4</div>
                     </div>
                 </div>
                 <div id="canvasContaianer" class ="col-sm-8 col-md-8">
@@ -61,6 +60,19 @@
                 </div>
                 <div id="rightSiedBar" class="col-sm-2 col-md-2 sidebar">
                     <h2>Options</h2>
+
+                    <button id="datashape-btn" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#div-datashape">Data Shape</button>
+                    <div id="div-datashape" class="collapse">
+                        <div id="change-datashape-x" class="input-group oprion-items">
+                            <span class="input-group-addon">Shape_X</span>
+                            <input id="change-datashape-x-input" type="text" class="form-control" placeholder="0~DataSize" aria-describedby="value_min">
+                        </div>
+                        <div id="change-datashape-y" class="input-group oprion-items">
+                            <span class="input-group-addon">Shape_Y</span>
+                            <input id="change-datashape-y-input" type="text" class="form-control" placeholder="0~DataSize" aria-describedby="value_max">
+                        </div>
+                    </div>
+
                     <button id="initializer-btn" type="button" class="btn btn-info" data-toggle="collapse" data-target="#div-initializer">Initializer</button>
                     <div id="div-initializer" class="collapse">
                         <div class="oprion-items">
@@ -142,17 +154,17 @@
                         </div>
                     </div>
 
-
-
                     <button id="model-addlayer-btn" type="button" class="btn btn-warning"> + AddLayer</button>
                     <button id="model-delete-btn" type="button" class=
                             "btn btn-danger">Delete</button>
+
+
                 </div>
 
             </div>
         </div>
 
-
+    </div>
     <footer>
         <div id="nav_footer" class="navbar navbar-default navbar-fixed-bottom">
             <div class="container-fluid">
@@ -166,7 +178,9 @@
     <script type="text/javascript" src="RegressionModel.js"></script>
     <script type="text/javascript" src="NeuralNetModel.js"></script>
     <script type="text/javascript" src="ConvolutionModel.js"></script>
+    <script type="text/javascript" src="DataModel.js"></script>
     <script type="text/javascript" src="ViewControl.js"></script>
+
     </body>
 
     <button id="btn-dummy" style="display: none" type="button" class="btn btn-info layer" data-toggle="collapse" data-target="#div-layer1">Layer1</button>

@@ -467,6 +467,8 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
     });
 
     this.changeOptionMenu =function () {
+
+        clearDataShapeOption();
         //Set Initializer
         $('#initializer-btn').show();
         var iniType = this.initializer.type;
