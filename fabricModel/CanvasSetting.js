@@ -11,23 +11,23 @@ canvas.on('mouse:move', function(options) {
     //console.log(canvasX,canvasY);
 });
 
+
 /////////////////////////////////////////////
 ////////////manage ML models/////////////////
 /////////////////////////////////////////////
 var modelCnt=0;
 var models=[];
+var currentSelectedArrow;
 var currentSelectedModel; // Use when I change options
 
 function getModelById(id){
     for(model in models){
-        console.log(models[model]);
         if(models[model].ID ===id) return models[model];
     }
     return null;
 }
 function getModelIdxById(id){
     for(model in models){
-        console.log(models[model]);
         if(models[model].ID ===id) return model;
     }
     return null;
@@ -45,7 +45,6 @@ function canvaResize (event) {
     canvas.setHeight(mid.clientHeight-head.clientHeight-foot.clientHeight);
     canvas.calcOffset();
 }
-
 
 window.onresize = canvaResize;
 canvaResize();

@@ -47,7 +47,14 @@ function DataPreprocessingModel(id,type,pointLeft, pointTop){
     this.fabricModel.on('selected',function(options){
         currentSelectedModel=getModelById(this.id);
         currentSelectedModel.changeOptionMenu();
+        modelConnect(currentSelectedModel);
+        clearConnectModelDelete();
     });
+    this.fabricModel.on('moving',function (options) {
+        currentSelectedModel=getModelById(this.id);
+        trackingModel(currentSelectedModel);
+    });
+
     this.changeOptionMenu =function () {
         clearDataShapeOption();
         clearDefaultOptions();
@@ -87,7 +94,15 @@ function InputModel(id,fileID,pointLeft, pointTop){
     this.fabricModel.on('selected',function(options){
         currentSelectedModel=getModelById(this.id);
         currentSelectedModel.changeOptionMenu();
+        modelConnect(currentSelectedModel);
+        clearConnectModelDelete();
     });
+
+    this.fabricModel.on('moving',function (options) {
+        currentSelectedModel=getModelById(this.id);
+        trackingModel(currentSelectedModel);
+    });
+
     this.changeOptionMenu =function () {
         makeDataShapeOption();
         clearDefaultOptions();
@@ -106,6 +121,7 @@ function InputModel(id,fileID,pointLeft, pointTop){
     {
         try
         {
+            //TODO
             // var XML=new XMLWriter();
             // XML.BeginNode("");
             // XML.Node("data", this.type);
@@ -130,3 +146,4 @@ function makeDataShapeOption(){
     $('#datashape-btn').show();
     $('#datashape-btn').addClass('collapsed');
 }
+

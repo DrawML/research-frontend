@@ -91,3 +91,12 @@ canvas{
 #datashape-btn{
     width:100%;
 }
+
+#connectModel{
+    width:100%;
+}
+
+#connectionDelete{
+    width : 100%;
+    margin-top : 5px;
+}

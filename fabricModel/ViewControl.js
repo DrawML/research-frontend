@@ -93,6 +93,7 @@ function handleDropEvent( event, ui ) {
     }
 }
 
+
 function init() {
     $('#leftSideBar .list-group-item').draggable( {
         cursor: 'move',
@@ -113,6 +114,7 @@ $(document).ready(function(){
 
     clearDefaultOptions();
     clearDataShapeOption();
+    clearConnectModelDelete();
 
     //왼쪽 탭 설정
     $('#model_group').show();
@@ -250,9 +252,17 @@ $(document).ready(function(){
         }
     });
 
+
+    //Connection Delete
+
+    $('#connectionDelete').click(function () {
+        deleteLineArrow();
+    });
+
     //Model delete
     $('#model-delete-btn').click(function () {
         clearLayerOption();
+        clearLine(currentSelectedModel);
         var curIdx=getModelIdxById(currentSelectedModel.ID);
         models.splice(curIdx,1);
         canvas.remove(currentSelectedModel.fabricModel);
@@ -282,5 +292,33 @@ $(document).ready(function(){
     });
 
 
+    //Model Selection
+
+    $('#connectModel').click(function () {
+        if($(this).hasClass('btn-success')){//선택했을때
+            connectStart();
+        }else{//선택중일때 -> 취소
+            connectComplete();
+        }
+    });
+
 });
 
+/////////////////////////////////////////////
+////////////Control Connect Model////////////
+/////////////////////////////////////////////
+
+function connectStart(){
+    $('#connectModel').removeClass('btn-success');
+    $('#connectModel').addClass('btn-danger');
+    $('#connectModel').text("Connecting.....");
+    canvas.deactivateAll().renderAll();
+    makingModel=true;
+
+}
+
+function connectComplete(){
+    $('#connectModel').removeClass('btn-danger');
+    $('#connectModel').addClass('btn-success');
+    $('#connectModel').text("Connect Model");
+}

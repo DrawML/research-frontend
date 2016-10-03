@@ -202,6 +202,13 @@ function Regression(id,type,pointLeft, pointTop){
     this.fabricModel.on('selected',function(options){
         currentSelectedModel=getModelById(this.id);
         currentSelectedModel.changeOptionMenu();
+        modelConnect(currentSelectedModel);
+        clearConnectModelDelete();
+    });
+
+    this.fabricModel.on('moving',function (options) {
+        currentSelectedModel=getModelById(this.id);
+        trackingModel(currentSelectedModel);
     });
 
     this.changeOptionMenu =function () {
