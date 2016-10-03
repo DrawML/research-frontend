@@ -50,10 +50,11 @@
           <file leaf-file-name="ArrowModel.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/ArrowModel.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="709">
-                  <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
+                <state relative-caret-position="741">
+                  <caret line="70" column="37" selection-start-line="70" selection-start-column="37" selection-end-line="70" selection-end-column="37" />
                   <folding>
                     <element signature="n#!!doc;n#_createArrowHead#0" expanded="false" />
+                    <element signature="n#!!block;n#_createArrowHead#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -300,12 +301,12 @@
       <workItem from="1474630049703" duration="603000" />
       <workItem from="1474953895791" duration="8899000" />
       <workItem from="1475220617053" duration="3726000" />
-      <workItem from="1475469374459" duration="6300000" />
+      <workItem from="1475469374459" duration="6766000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30378000" />
+    <option name="totallyTimeSpent" value="30844000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -389,6 +390,7 @@
           <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
           <folding>
             <element signature="n#!!doc;n#_createArrowHead#0" expanded="false" />
+            <element signature="n#!!block;n#_createArrowHead#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -841,10 +843,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ArrowModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="709">
-          <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
+        <state relative-caret-position="741">
+          <caret line="70" column="37" selection-start-line="70" selection-start-column="37" selection-end-line="70" selection-end-column="37" />
           <folding>
             <element signature="n#!!doc;n#_createArrowHead#0" expanded="false" />
+            <element signature="n#!!block;n#_createArrowHead#0" expanded="false" />
           </folding>
         </state>
       </provider>

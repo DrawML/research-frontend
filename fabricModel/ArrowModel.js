@@ -30,16 +30,12 @@ function _createArrowHead(points) {
         selectable: false
     });
 
-    canvas.add(triangle);
     return triangle;
 }
 
 
 function createLineArrow(points) {
-
-
-
-    var line = new fabric.Line(points, {
+    this.line = new fabric.Line(points, {
         strokeWidth: 5,
         stroke: '#7db9e8',
         originX: 'center',
@@ -51,7 +47,27 @@ function createLineArrow(points) {
         selectable: false
     });
 
-    canvas.add(line);
     this.triangle =_createArrowHead(points);
+}
+
+
+function LineArrow(points){
+
+    this.fabric = new createLineArrow(points);
+
+    this.changePoint = function (points) {
+        this.deleteFabric();
+        this.fabric = new createLineArrow(points);
+        canvas.add(this.fabric.line);
+        canvas.add(this.fabric.triangle);
+        canvas.renderAll();
+    }
+
+    this.deleteFabric = function () {
+        canvas.remove(this.fabric.triangle);
+        canvas.remove(this.fabric.line);
+    }
+    canvas.add(this.fabric.line);
+    canvas.add(this.fabric.triangle);
     canvas.renderAll();
 }
