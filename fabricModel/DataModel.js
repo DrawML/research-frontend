@@ -61,15 +61,15 @@ function DataPreprocessingModel(id,type,pointLeft, pointTop){
         clearLayerOption();
     }
 
-    this.toXML =  function()
+    this.toXML =  function(XML,seq)
     {
+        this.seq=seq;
         try
         {
-            // var XML=new XMLWriter();
-            // XML.BeginNode("");
-            // XML.Node("data", this.type);
-            // XML.Close();
-            // console.log(XML.ToString().replace(/</g,"\n<"));
+            XML.BeginNode(this.type.toString());
+            XML.Attrib("seq",seq.toString());
+            XML.Node("data", makeFileidCommaString(this.prevModel));
+            XML.EndNode();
         }
         catch(Err)
         {
@@ -115,24 +115,6 @@ function InputModel(id,fileID,pointLeft, pointTop){
 
     this.changeSHapeY = function(val){
         this.ShapeY=val;
-    }
-
-    this.toXML =  function()
-    {
-        try
-        {
-            //TODO
-            // var XML=new XMLWriter();
-            // XML.BeginNode("");
-            // XML.Node("data", this.type);
-            // XML.Close();
-            // console.log(XML.ToString().replace(/</g,"\n<"));
-        }
-        catch(Err)
-        {
-            alert("Error: " + Err.description);
-        }
-        return true;
     }
 
 }

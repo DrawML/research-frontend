@@ -399,11 +399,10 @@ function NeuralNetworks(id,pointLeft, pointTop){
         this.layerSet.setLayerOutput(layer,output);
     }
 
-    this.toXML =  function()
+    this.toXML =  function(XML)
     {
         try
         {
-            var XML=new XMLWriter();
             XML.BeginNode("model");
                 XML.Node("type", "neural_network");
                 this.layerSet.toXML(XML);
@@ -412,8 +411,6 @@ function NeuralNetworks(id,pointLeft, pointTop){
                 this.regularization.toXML(XML);
                 XML.Node("training_epoch",this.training_epoch.toString());
             XML.EndNode();
-            XML.Close();
-            console.log(XML.ToString().replace(/</g,"\n<"));
         }
         catch(Err)
         {

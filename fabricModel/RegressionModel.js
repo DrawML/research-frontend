@@ -113,8 +113,8 @@ function Initializer(type){
         XML.BeginNode("initializer");
         XML.Node("type",this.type);
         if(this.type == 'random_uniform'){
-            XML.Node("min",this.max.toString());
-            XML.Node("max",this.min.toString());
+            XML.Node("min",this.min.toString());
+            XML.Node("max",this.max.toString());
         }
         else if(this.type == 'random_normal'){
             XML.Node("value",this.val.toString());
@@ -283,19 +283,16 @@ function Regression(id,type,pointLeft, pointTop){
     }
 
     //makeXML
-    this.toXML =  function()
+    this.toXML =  function(XML)
     {
         try
         {
-            var XML=new XMLWriter();
             XML.BeginNode("model");
             XML.Node("type", this.type);
             this.initializer.toXML(XML);
             this.optimizer.toXML(XML);
             this.regularization.toXML(XML);
             XML.Node("training_epoch",this.training_epoch.toString());
-            XML.Close();
-            console.log(XML.ToString().replace(/</g,"\n<"));
         }
         catch(Err)
         {

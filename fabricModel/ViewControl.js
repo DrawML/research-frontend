@@ -13,6 +13,19 @@ function myHelper(event) {
         '<h3 style="display: table-cell;vertical-align: middle;text-align: center">'+iid+'</h3>'+
         '</div>';
 }
+
+//Check ML Model
+function canMLmodel(){
+    for(var x =0; x<models.length;x++){
+        if(models[x] instanceof InputModel || models[x] instanceof DataPreprocessingModel){
+            continue;
+        }else{
+            return false;
+        }
+    }
+    return true;
+}
+
 function handleDragStop(event,ui){
     console.log($(this).attr('id'));
 }
@@ -22,6 +35,10 @@ function handleDropEvent( event, ui ) {
     var wi=$('#leftSideBar').width();
     var ContainerTop =$('#paintContainer').offset().top;
     if(ui.draggable.attr('id')=="LinearRegression"){
+        if(!canMLmodel()) {
+            alert("Already have ML model...!");
+            return;
+        }
         clearDataShapeOption();
         clearLayerOption();
         makeDefaultOptions()
@@ -31,6 +48,10 @@ function handleDropEvent( event, ui ) {
             canvas.add(l.fabricModel);
             canvas.renderAll();
     }else if(ui.draggable.attr('id')=="PolynomialRegression"){
+        if(!canMLmodel()) {
+            alert("Already have ML model...!");
+            return;
+        }
         clearDataShapeOption();
         clearLayerOption();
         makeDefaultOptions()
@@ -40,6 +61,10 @@ function handleDropEvent( event, ui ) {
         canvas.add(l.fabricModel);
         canvas.renderAll();
     }else if(ui.draggable.attr('id')=="SoftMaxRegression"){
+        if(!canMLmodel()) {
+            alert("Already have ML model...!");
+            return;
+        }
         clearDataShapeOption();
         clearLayerOption();
         makeDefaultOptions()
@@ -49,6 +74,10 @@ function handleDropEvent( event, ui ) {
         canvas.add(l.fabricModel);
         canvas.renderAll();
     }else if(ui.draggable.attr('id')=="NeuralNetworks"){
+        if(!canMLmodel()) {
+            alert("Already have ML model...!");
+            return;
+        }
         clearLayerOption();
         clearDataShapeOption();
         makeDefaultOptions()
@@ -61,6 +90,10 @@ function handleDropEvent( event, ui ) {
         makeLayerOption(1);
         $('#model-addlayer-btn').show();
     }else if(ui.draggable.attr('id')=="ConvolutionNeuralNet"){
+        if(!canMLmodel()) {
+            alert("Already have ML model...!");
+            return;
+        }
         clearLayerOption();
         clearDataShapeOption();
         makeDefaultOptions()
@@ -126,7 +159,7 @@ $(document).ready(function(){
         else {
             $(this).addClass("active");
             $('#data_select_view').removeClass("active");
-
+0
             $('#model_group').show();
             $('#data_preprocessing_group').hide();
             $('#data_user_group').hide();
@@ -240,16 +273,9 @@ $(document).ready(function(){
 
 
 
-
-
     //Models To XML
     $('#footer-toxml-btn').click(function () {
-        console.log('--------------Model -> XML---------------')
-        console.log('//////////Current Model List//////////////');
-        console.log(models.length + '개의 모델들이 있다.');
-        for(var x in models){
-            models[x].toXML();
-        }
+        makeXML();
     });
 
 
@@ -321,4 +347,129 @@ function connectComplete(){
     $('#connectModel').removeClass('btn-danger');
     $('#connectModel').addClass('btn-success');
     $('#connectModel').text("Connect Model");
+}
+
+
+/////////////////////////////////////////////
+////////////////XML Functions////////////////
+/////////////////////////////////////////////
+
+
+//INPUT XML
+//DATA_PROCESSING XML
+function makeXML() {
+    var XML = new XMLWriter();
+    XML.BeginNode("experiment");
+
+    var visit = new Array();
+    for(var x =0; x<models.length;x++) visit.push(false);
+    var inputList = [];
+
+    //Input
+    for(var x=0 ; x<models.length;x++){
+        if(models[x] instanceof InputModel) {
+            inputList.push(models[x]);
+            visit[x]=true;
+        }
+    }
+    if(inputList.length ==0) {
+        alert("No input Data");
+        return ;
+    }
+    var x_input = inputList[0].ShapeX;
+    var y_input = inputList[0].ShapeY;
+    XML.BeginNode("input");
+    XML.Node("shape","["+x_input.toString()+"],"+"["+y_input.toString()+"]");
+    XML.Node("data",makeFileidCommaString(inputList));
+    XML.EndNode();
+
+    console.log(visit);
+    var modelList = topologicalSort(visit);
+
+    //data_processing
+    XML.BeginNode("data_processing");
+    XML.Node("size",(modelList.length-1).toString());
+    var seq=1;
+    for(var x in modelList){
+        if(modelList[x] instanceof DataPreprocessingModel){
+            modelList[x].toXML(XML,seq++);
+        }else continue;
+    }
+    XML.EndNode();
+
+    //model
+    for(var x=0; x<models.length;x++){
+        if(models[x] instanceof InputModel || models[x] instanceof DataPreprocessingModel){
+            continue;
+        }else{
+            models[x].toXML(XML);
+        }
+    }
+
+    XML.Close();
+    console.log(XML.ToString().replace(/</g, "\n<"));
+}
+
+
+
+function makeFileidCommaString(list){
+    var str ="";
+    for(var x =0; x<list.length;x++){
+        if(list[x] instanceof InputModel) {
+            if (x != list.length - 1)str += list[x].fileID + ",";
+            else str += list[x].fileID;
+        }else if(list[x] instanceof DataPreprocessingModel){
+            if (x != list.length - 1)str += "seq"+list[x].seq + ",";
+            else str += "seq"+list[x].seq ;
+        }
+    }
+    return str;
+}
+
+
+function topologicalSort(visit){
+
+    var list=[];//sorted list
+
+    //find ML model
+    var startModel;
+    for(var x=0; x<models.length;x++){
+        if(models[x] instanceof InputModel || models[x] instanceof DataPreprocessingModel){
+            continue;
+        }else{
+            startModel=models[x];
+            break;
+        }
+    }
+    console.log(startModel);
+    //DFS
+    list.push(startModel);
+    visit[getModelIdxById(startModel.ID)]=true;
+    var stack=[startModel];
+
+    var curModel =stack[stack.length-1];
+    while(stack.length>0){
+
+        if(curModel.prevModel==null || curModel.prevModel.length==0) {
+            alert("not fully connected!!");
+            return null;
+        }
+        console.log(stack.length);
+        console.log(curModel.prevModel);
+
+        for(var p=0; p<curModel.prevModel.length;p++){
+            console.log("visit : " + getModelIdxById(curModel.prevModel[p].ID));
+            if(visit[getModelIdxById(curModel.prevModel[p].ID)]==true) continue;
+            else{
+                list.push(curModel.prevModel[p]);
+                visit[getModelIdxById(curModel.prevModel[p].ID)]=true;
+                stack.push(curModel.prevModel[p]);
+            }
+        }
+        curModel=stack.pop();
+    }
+
+    //console.log(visit);
+    list.reverse();
+    return list;
 }

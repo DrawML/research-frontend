@@ -621,11 +621,10 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
         this.layerSet.setLayerOutput(layer,output);
     }
 
-    this.toXML =  function()
+    this.toXML =  function(XML)
     {
         try
         {
-            var XML=new XMLWriter();
             XML.BeginNode("model");
             XML.Node("type", "convolution_neural_network");
             this.dropOut.toXML(XML);
@@ -636,7 +635,6 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
             XML.Node("training_epoch",this.training_epoch.toString());
             XML.EndNode();
             XML.Close();
-            console.log(XML.ToString().replace(/</g,"\n<"));
         }
         catch(Err)
         {
