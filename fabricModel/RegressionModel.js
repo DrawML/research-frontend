@@ -301,6 +301,19 @@ function Regression(id,type,pointLeft, pointTop){
         return true;
     }
 
+    this.toModelXML = function(XML){
+        try
+        {
+            var list = [this.type,this.fabricModel.left,this.fabricModel.top];
+            XML.Node("Regression", makeCommaString(list));
+        }
+        catch(Err)
+        {
+            alert("Error: " + Err.description);
+        }
+        return true;
+    }
+
     this.changeOptionMenu();
 
 

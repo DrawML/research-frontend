@@ -77,6 +77,19 @@ function DataPreprocessingModel(id,type,pointLeft, pointTop){
         }
         return true;
     }
+
+    this.toModelXML = function(XML){
+        try
+        {
+            var list = [this.type,this.fabricModel.left,this.fabricModel.top];
+            XML.Node("DataPreprocessingModel", makeCommaString(list));
+        }
+        catch(Err)
+        {
+            alert("Error: " + Err.description);
+        }
+        return true;
+    }
 }
 
 function InputModel(id,fileID,pointLeft, pointTop){
@@ -115,6 +128,19 @@ function InputModel(id,fileID,pointLeft, pointTop){
 
     this.changeSHapeY = function(val){
         this.ShapeY=val;
+    }
+
+    this.toModelXML = function(XML){
+        try
+        {
+            var list = [this.fileID,this.fabricModel.left,this.fabricModel.top];
+            XML.Node("InputModel", makeCommaString(list));
+        }
+        catch(Err)
+        {
+            alert("Error: " + Err.description);
+        }
+        return true;
     }
 
 }

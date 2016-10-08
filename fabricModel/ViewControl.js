@@ -275,6 +275,7 @@ $(document).ready(function(){
 
     //Models To XML
     $('#footer-toxml-btn').click(function () {
+        makeModelXML();
         makeXML();
     });
 
@@ -472,4 +473,28 @@ function topologicalSort(visit){
     //console.log(visit);
     list.reverse();
     return list;
+}
+
+
+//Model 좌표를 위한 xml
+function makeModelXML(){
+
+    var XML = new XMLWriter();
+    XML.BeginNode("model");
+    for(var x  in models){
+        console.log(models[x]);
+        models[x].toModelXML(XML);
+    }
+    XML.Close();
+    console.log(XML.ToString().replace(/</g, "\n<"));
+}
+
+function makeCommaString(list){
+    var str ="";
+    for(var x =0; x<list.length;x++){
+            if (x != list.length - 1)str += list[x] + ",";
+            else str += list[x];
+        }
+
+    return str;
 }

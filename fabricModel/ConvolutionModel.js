@@ -642,6 +642,18 @@ function ConvolutionNeuralNetworks(id,pointLeft, pointTop){
         }
         return true;
     }
+    this.toModelXML = function(XML){
+        try
+        {
+            var list = [this.fabricModel.left,this.fabricModel.top];
+            XML.Node("ConvolutionNeuralNetworks", makeCommaString(list));
+        }
+        catch(Err)
+        {
+            alert("Error: " + Err.description);
+        }
+        return true;
+    }
 }
 
 function makeCNNLayerOption(LayerNumber){

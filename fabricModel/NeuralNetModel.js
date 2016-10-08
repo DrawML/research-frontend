@@ -419,6 +419,18 @@ function NeuralNetworks(id,pointLeft, pointTop){
         return true;
     }
 
+    this.toModelXML = function(XML){
+        try
+        {
+            var list = [this.fabricModel.left,this.fabricModel.top];
+            XML.Node("NeuralNetworks", makeCommaString(list));
+        }
+        catch(Err)
+        {
+            alert("Error: " + Err.description);
+        }
+        return true;
+    }
 
 
 }
